@@ -1,8 +1,10 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import RecordsView, { IRecord } from "@/components/recordsView";
+
 
 const records = [
   { id: 1, title: "reading", category: "reading", time: "00:02:01" },
@@ -57,16 +59,10 @@ const HOME = () => {
       <View className="m-5">
         <Text className="text-xl font-Rsemibold color-text">October 2024</Text>
         <View className="flex flex-row gap-4 mt-3">
-          {records.map((record) => {
+          {records.map((record : IRecord) => {
             return (
-              <View
-                key={`${record.id}-key`}
-                className="bg-secondary rounded-full h-[100px] w-[100px] flex flex-col justify-center items-center"
-              >
-                <Text>{record.category}</Text>
-                <Text>{record.time}</Text>
-              </View>
-            );
+              <RecordsView record={record} />
+            )
           })}
         </View>
       </View>
