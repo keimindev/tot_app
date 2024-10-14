@@ -3,7 +3,8 @@ import React from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import RecordsView, { IRecord } from "@/components/recordsView";
+import RecordsView, { IRecord } from "@/components/RecordsView";
+
 
 
 const records = [
