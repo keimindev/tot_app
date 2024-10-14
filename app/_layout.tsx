@@ -39,6 +39,8 @@ const RootLayout = () => {
       <Stack>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="section" options={{ headerShown: false }} />
+        <Stack.Screen name="stopwatch" options={{ headerShown: false }} />
       </Stack>
     </GlobalProvider>
   );

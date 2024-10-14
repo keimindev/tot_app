@@ -15,7 +15,7 @@ const HOME = () => {
   const { user } = useGlobalContext();
 
   const submit = () => {
-    router.replace("/user");
+    router.replace("/section");
   };
 
   return (
