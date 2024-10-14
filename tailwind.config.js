@@ -9,11 +9,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#952323",
+        primary: "#2C4A52",
         secondary:{
-          DEFAULT: "#F2E8C6",
+          DEFAULT: "#537072",
           // DAD4B5 A73121
-        }
+        },
+        text: "#F4EBDB",
       },
       fontFamily: {
         Rthin: ["RobotoSlab", "sans-serif"],
