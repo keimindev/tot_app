@@ -1,9 +1,9 @@
+import { formatTimeClock } from "@/context/formatTime";
 import { View, Text } from "react-native";
 
 export interface IRecord {
   id: number;
-  title: string;
-  time: string;
+  recordTime: string;
   category: string;
 }
 
@@ -12,14 +12,13 @@ interface RecordsViewProps {
   }
 
 const RecordsView: React.FC<RecordsViewProps> = ({record}) => {
-    console.log(record, 'record')
   return (
     <View
       key={`${record.id}-key`}
-      className="bg-secondary rounded-full h-[100px] w-[100px] flex flex-col justify-center items-center"
+      className="bg-secondary rounded-full h-[120px] w-[120px] flex flex-col justify-center items-center m-3"
     >
-      <Text>{record.category}</Text>
-      <Text>{record.time}</Text>
+      <Text className="text-lg font-Rregular">{record.category}</Text>
+      <Text className="text-lg font-Rsemibold">{formatTimeClock(Number(record.recordTime))}</Text>
     </View>
   );
 };

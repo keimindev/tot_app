@@ -1,10 +1,12 @@
+import { getUserRecords } from "@/lib/appwrite";
 import { Link } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Stopwatch = () => {
   const [timer, setTimer] = useState("stopwatch");
+
 
   // State to manage time and stopwatch status
   const [time, setTime] = useState(0);

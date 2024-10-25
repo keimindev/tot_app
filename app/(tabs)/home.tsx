@@ -1,19 +1,31 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import RecordsView, { IRecord } from "@/components/RecordsView";
+import { getMonthlyRecords, getUserRecords} from "@/lib/appwrite";
+import { formatTimeClock } from "@/context/formatTime";
 
 
-
-const records = [
-  { id: 1, title: "reading", category: "reading", time: "00:02:01" },
-  { id: 2, title: "reading", category: "study", time: "10:05:10" },
-  { id: 3, title: "reading", category: "study", time: "10:05:10" },
-];
 const HOME = () => {
   const { user } = useGlobalContext();
+  const [totalRecord, setTotalRecord] = useState<any>([])
+  const [totalTimeRecord, setTotalTimeRecord] = useState<number>(0)
+
+  const month = new Date().getMonth();
+  const year = new Date().getFullYear();
+
+  useEffect(() =>{
+    getUserRecords(user.$id)
+    .then((res) => 
+    setTotalRecord(res))
+
+    getMonthlyRecords(user.$id, 2024, 10)
+    .then((res) => 
+      setTotalTimeRecord(res)
+    )
+  },[])
 
   const submit = () => {
     router.replace("/section");
@@ -59,8 +71,9 @@ const HOME = () => {
       </View>
       <View className="m-5">
         <Text className="text-xl font-Rsemibold color-text">October 2024</Text>
-        <View className="flex flex-row gap-4 mt-3">
-          {records.map((record : IRecord) => {
+        <Text className="text-right text-lg text-secondary font-Rbold">{formatTimeClock(totalTimeRecord)}</Text>
+        <View className="flex flex-row mt-3 items-center justify-center">
+          {totalRecord.map((record : IRecord) => {
             return (
               <RecordsView record={record} />
             )

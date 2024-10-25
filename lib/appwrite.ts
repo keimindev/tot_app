@@ -120,3 +120,81 @@ export async function signOut() {
     throw new Error(error);
   }
 } 
+
+// Save record
+export async function saveRecords(data : any) {
+  try {
+    const newRecord = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.recordCollectionId,
+      ID.unique(),
+      {
+        category: data.category,
+        recordTime: 3040000,
+        users: data.id,
+      }
+    );
+
+    return newRecord;
+  } catch (error : any) {
+    throw new Error(error);
+  }
+}
+
+
+// Get records
+export const getUserRecords= async (id : string) => {
+  try {
+    const currentAccount = await account.get();
+    if(!currentAccount) throw Error;
+
+    const currentRecords = databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.recordCollectionId,
+      [Query.equal("users", id)]
+    );
+
+    if (!currentRecords) throw Error;
+
+    return (await currentRecords).documents
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+// Get monthly total records
+export const getMonthlyRecords = async (id: string, year: number, month: number) => {
+  try {
+    const currentAccount = await account.get();
+    if (!currentAccount) throw new Error("Account not found");
+
+    // 해당 월의 시작일과 종료일을 설정
+    const startDate = new Date(year, month - 1, 1).toISOString(); // 월은 0부터 시작하므로 -1
+    const endDate = new Date(year, month, 0, 23, 59, 59, 999).toISOString(); // 다음 달의 0일은 현재 월의 마지막 날
+
+    // 해당 사용자와 특정 월에 해당하는 문서를 필터링
+    const currentRecords = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.recordCollectionId,
+      [
+        Query.equal("users", id),
+        Query.greaterThanEqual("$createdAt", startDate),
+      ]
+    );
+
+    if (!currentRecords) throw new Error("No records found");
+
+    // recordTime 필드를 합산
+    const totalRecordTime = currentRecords.documents.reduce((sum, record) => {
+      return sum + (Number(record.recordTime) || 0); // recordTime이 없을 경우 0으로 처리
+    }, 0);
+
+    return totalRecordTime;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message || "Failed to get monthly record time sum");
+  }
+};
+
+
+
