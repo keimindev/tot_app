@@ -93,7 +93,7 @@ export async function getAccount() {
 export const getCurrentUser = async () => {
   try {
     const currentAccount = await account.get();
-    if(!currentAccount) throw Error;
+    if (!currentAccount) throw Error;
 
     const currentUser = databases.listDocuments(
       appwriteConfig.databaseId,
@@ -103,7 +103,7 @@ export const getCurrentUser = async () => {
 
     if (!currentUser) throw Error;
 
-    return (await currentUser).documents[0]
+    return (await currentUser).documents[0];
   } catch (error: any) {
     console.log(error);
     throw new Error(error);
@@ -116,37 +116,36 @@ export async function signOut() {
     const session = await account.deleteSession("current");
 
     return session;
-  } catch (error : any) {
+  } catch (error: any) {
     throw new Error(error);
   }
-} 
+}
 
 // Save record
-export async function saveRecords(data : any) {
+export async function saveRecords(category: string, id: string, time: number) {
   try {
     const newRecord = await databases.createDocument(
       appwriteConfig.databaseId,
       appwriteConfig.recordCollectionId,
       ID.unique(),
       {
-        category: data.category,
-        recordTime: 3040000,
-        users: data.id,
+        category: category,
+        recordTime: time,
+        users: id,
       }
     );
 
     return newRecord;
-  } catch (error : any) {
+  } catch (error: any) {
     throw new Error(error);
   }
 }
 
-
 // Get records
-export const getUserRecords= async (id : string) => {
+export const getUserRecords = async (id: string) => {
   try {
     const currentAccount = await account.get();
-    if(!currentAccount) throw Error;
+    if (!currentAccount) throw Error;
 
     const currentRecords = databases.listDocuments(
       appwriteConfig.databaseId,
@@ -156,14 +155,42 @@ export const getUserRecords= async (id : string) => {
 
     if (!currentRecords) throw Error;
 
-    return (await currentRecords).documents
+    // category별로 recordTime을 합산
+    const recordsByCategoryMap = (await currentRecords).documents.reduce(
+      (acc, record) => {
+        const category = record.category || "Uncategorized"; // category가 없으면 "Uncategorized"로 처리
+        const recordTime = record.recordTime || 0; // recordTime이 없으면 0으로 처리
+
+        if (!acc[category]) {
+          acc[category] = 0;
+        }
+
+        acc[category] += recordTime;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    // 결과를 배열 형태로 변환
+    const recordsByCategoryArray = Object.entries(recordsByCategoryMap).map(
+      ([category, recordTime]) => ({
+        category,
+        recordTime,
+      })
+    );
+
+    return recordsByCategoryArray;
   } catch (error: any) {
     throw new Error(error);
   }
 };
 
 // Get monthly total records
-export const getMonthlyRecords = async (id: string, year: number, month: number) => {
+export const getMonthlyRecords = async (
+  id: string,
+  year: number,
+  month: number
+) => {
   try {
     const currentAccount = await account.get();
     if (!currentAccount) throw new Error("Account not found");
@@ -195,6 +222,3 @@ export const getMonthlyRecords = async (id: string, year: number, month: number)
     throw new Error(error.message || "Failed to get monthly record time sum");
   }
 };
-
-
-

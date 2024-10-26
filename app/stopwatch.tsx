@@ -1,12 +1,13 @@
-import { getUserRecords } from "@/lib/appwrite";
-import { Link } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { saveRecords } from "@/lib/appwrite";
+import { Link, router } from "expo-router";
+import { useRef, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Stopwatch = () => {
   const [timer, setTimer] = useState("stopwatch");
-
+  const { user } = useGlobalContext();
 
   // State to manage time and stopwatch status
   const [time, setTime] = useState(0);
@@ -43,8 +44,9 @@ const Stopwatch = () => {
   };
 
   // Function to resume the stopwatch
-  const resumeStopwatch = () => {
-    startStopwatch();
+  const saveStopwatchRecord = () => {
+    saveRecords("reading", user.$id, time)
+    router.push('/home')
   };
 
   // Function to reset the stopwatch
@@ -97,7 +99,7 @@ const Stopwatch = () => {
       <View className="mt-10">
       {!running && time > 0 && (
           <TouchableOpacity
-            onPress={resumeStopwatch}
+            onPress={saveStopwatchRecord}
             activeOpacity={0.7}
             className="w-[150px] min-h-[40px] p-5 rounded-lg flex justify-center items-center bg-secondary"
           >
