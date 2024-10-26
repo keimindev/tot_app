@@ -142,15 +142,23 @@ export async function saveRecords(category: string, id: string, time: number) {
 }
 
 // Get records
-export const getUserRecords = async (id: string) => {
+export const getUserRecords = async (id: string, year: number,
+  month: number) => {
   try {
     const currentAccount = await account.get();
     if (!currentAccount) throw Error;
 
+    const startDate = new Date(year, month - 1, 1).toISOString(); // 월은 0부터 시작하므로 -1
+    const endDate = new Date(year, month, 0, 23, 59, 59, 999).toISOString(); // 다음 달의 0일은 현재 월의 마지막 날
+
     const currentRecords = databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.recordCollectionId,
-      [Query.equal("users", id)]
+      [
+        Query.equal("users", id),
+        Query.greaterThanEqual("$createdAt", startDate),
+        Query.lessThanEqual("$createdAt", endDate)
+      ]
     );
 
     if (!currentRecords) throw Error;
@@ -206,6 +214,7 @@ export const getMonthlyRecords = async (
       [
         Query.equal("users", id),
         Query.greaterThanEqual("$createdAt", startDate),
+        Query.lessThanEqual("$createdAt", endDate)
       ]
     );
 

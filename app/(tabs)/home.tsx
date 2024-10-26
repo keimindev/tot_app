@@ -25,7 +25,9 @@ const HOME = () => {
   const today = new Date().getDate();
 
   useEffect(() => {
-    getUserRecords(user.$id).then((res) => setTotalRecord(res));
+    getUserRecords(user.$id, year, month + 1).then((res) =>
+      setTotalRecord(res)
+    );
 
     getMonthlyRecords(user.$id, year, month + 1).then((res) =>
       setTotalTimeRecord(res)
@@ -44,9 +46,9 @@ const HOME = () => {
     router.replace("/section");
   };
 
-  const capitalize= (ch: string) => {
+  const capitalize = (ch: string) => {
     return ch.charAt(0).toUpperCase() + ch.slice(1);
-  }
+  };
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -93,8 +95,8 @@ const HOME = () => {
                   <Text className="">{formatTimeClock(item.recordTime)}</Text>
                 </View>
               );
-          }))
-        }
+            })
+          )}
         </View>
       </View>
       <View className="m-5">
