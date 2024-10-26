@@ -222,3 +222,92 @@ export const getMonthlyRecords = async (
     throw new Error(error.message || "Failed to get monthly record time sum");
   }
 };
+
+// Get today total records
+export const getTodayRecords = async (
+  id: string,
+  year: number,
+  month: number,
+  day: number
+) => {
+  try {
+    const currentAccount = await account.get();
+    if (!currentAccount) throw new Error("Account not found");
+
+    const startDate = new Date(year, month - 1, day, 0, 0, 0).toISOString(); // 월은 0부터 시작하므로 -1
+    const endDate = new Date(
+      year,
+      month - 1,
+      day,
+      23,
+      59,
+      59,
+      999
+    ).toISOString();
+
+    // 해당 사용자와 특정 월에 해당하는 문서를 필터링
+    const currentRecords = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.recordCollectionId,
+      [
+        Query.equal("users", id),
+        Query.greaterThanEqual("$createdAt", startDate),
+        Query.lessThan("$createdAt", endDate),
+      ]
+    );
+
+    if (!currentRecords) throw new Error("No records found");
+
+    return currentRecords.documents;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message || "Failed to get monthly record time sum");
+  }
+};
+
+// Get today total records
+export const getTodayTotalRecords = async (
+  id: string,
+  year: number,
+  month: number,
+  day: number
+) => {
+  try {
+    const currentAccount = await account.get();
+    if (!currentAccount) throw new Error("Account not found");
+
+    const startDate = new Date(year, month - 1, day, 0, 0, 0).toISOString(); // 월은 0부터 시작하므로 -1
+    const endDate = new Date(
+      year,
+      month - 1,
+      day,
+      23,
+      59,
+      59,
+      999
+    ).toISOString();
+
+    // 해당 사용자와 특정 월에 해당하는 문서를 필터링
+    const currentRecords = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.recordCollectionId,
+      [
+        Query.equal("users", id),
+        Query.greaterThanEqual("$createdAt", startDate),
+        Query.lessThan("$createdAt", endDate),
+      ]
+    );
+
+    if (!currentRecords) throw new Error("No records found");
+
+    // recordTime 필드를 합산
+    const totalRecordTime = currentRecords.documents.reduce((sum, record) => {
+      return sum + (Number(record.recordTime) || 0); // recordTime이 없을 경우 0으로 처리
+    }, 0);
+
+    return totalRecordTime;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message || "Failed to get monthly record time sum");
+  }
+};

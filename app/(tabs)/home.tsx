@@ -4,32 +4,49 @@ import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import RecordsView, { IRecord } from "@/components/RecordsView";
-import { getMonthlyRecords, getUserRecords} from "@/lib/appwrite";
+import {
+  getMonthlyRecords,
+  getTodayRecords,
+  getTodayTotalRecords,
+  getUserRecords,
+} from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
-
+import { isToday } from "@/context/formatDay";
 
 const HOME = () => {
   const { user } = useGlobalContext();
-  const [totalRecord, setTotalRecord] = useState<any>([])
-  const [totalTimeRecord, setTotalTimeRecord] = useState<number>(0)
+  const [totalRecord, setTotalRecord] = useState<any>([]);
+  const [totalTimeRecord, setTotalTimeRecord] = useState<number>(0);
+  const [todayRecord, setTodayRecord] = useState<any>([]);
+  const [todayTotalRecord, setTodayTotalRecord] = useState<number>(0);
 
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
+  const today = new Date().getDate();
 
-  useEffect(() =>{
-    getUserRecords(user.$id)
-    .then((res) => 
-    setTotalRecord(res))
+  useEffect(() => {
+    getUserRecords(user.$id).then((res) => setTotalRecord(res));
 
-    getMonthlyRecords(user.$id, 2024, 10)
-    .then((res) => 
+    getMonthlyRecords(user.$id, year, month + 1).then((res) =>
       setTotalTimeRecord(res)
-    )
-  },[])
+    );
+
+    getTodayRecords(user.$id, year, month + 1, today).then((res) =>
+      setTodayRecord(res)
+    );
+
+    getTodayTotalRecords(user.$id, year, month + 1, today).then((res) =>
+      setTodayTotalRecord(res)
+    );
+  }, []);
 
   const submit = () => {
     router.replace("/section");
   };
+
+  const capitalize= (ch: string) => {
+    return ch.charAt(0).toUpperCase() + ch.slice(1);
+  }
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -62,21 +79,34 @@ const HOME = () => {
         </Text>
         <View className="flex justify-end">
           <Text className="text-lg font-Rsemibold color-text text-right">
-            00:00:00
+            {formatTimeClock(todayTotalRecord)}
           </Text>
         </View>
         <View className="bg-secondary rounded-lg p-3 mt-3">
-          <Text className="text-center">There are no records</Text>
+          {todayRecord?.length === 0 ? (
+            <Text className="text-center">There are no records</Text>
+          ) : (
+            todayRecord?.map((item: any) => {
+              return (
+                <View className="flex flex-row justify-between px-2">
+                  <Text className="">{capitalize(item.category)}</Text>
+                  <Text className="">{formatTimeClock(item.recordTime)}</Text>
+                </View>
+              );
+          }))
+        }
         </View>
       </View>
       <View className="m-5">
-        <Text className="text-xl font-Rsemibold color-text">October 2024</Text>
-        <Text className="text-right text-lg text-secondary font-Rbold">{formatTimeClock(totalTimeRecord)}</Text>
+        <Text className="text-xl font-Rsemibold color-text">
+          {isToday(new Date())}
+        </Text>
+        <Text className="text-right text-lg text-secondary font-Rbold">
+          {formatTimeClock(totalTimeRecord)}
+        </Text>
         <View className="flex flex-row mt-3 items-center justify-center">
-          {totalRecord.map((record : IRecord) => {
-            return (
-              <RecordsView record={record} />
-            )
+          {totalRecord.map((record: IRecord) => {
+            return <RecordsView record={record} />;
           })}
         </View>
       </View>
