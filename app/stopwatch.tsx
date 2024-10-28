@@ -1,3 +1,4 @@
+import { formatTimeClock } from "@/context/formatTime";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { saveRecords } from "@/lib/appwrite";
 import { Link, router } from "expo-router";
@@ -46,16 +47,13 @@ const Stopwatch = () => {
     setTime(0);
     setRunning(false);
   };
-  function formatTime(time: number): import("react").ReactNode {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <SafeAreaView className="bg-primary h-full justify-center">
       <View className="mb-10">
         {timer === "stopwatch" ? (
           <Text className="text-7xl text-center font-Rbold text-white">
-            {formatTime(time)}
+            {formatTimeClock(time)}
           </Text>
         ) : (
           <Text className="text-7xl text-center font-Rbold text-whtie">
