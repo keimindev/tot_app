@@ -1,7 +1,7 @@
 import { getLastMonth, isToday } from "@/context/formatDay";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useEffect, useRef, useState } from "react";
-import { View, Text, TouchableOpacity, Image, Animated } from "react-native";
+import { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
 import { getMonthlyRecords, getUserRecords } from "@/lib/appwrite";
@@ -30,8 +30,8 @@ const User = () => {
       setLastMonthRecord(res);
     });
 
-    getMonthlyRecords(user.$id, year, month + 1).then((res) =>
-      setTotalRecord(res)
+    getMonthlyRecords(user.$id, year, month + 1).then((res) => {
+      setTotalRecord(res)}
     );
 
     getMonthlyRecords(user.$id, year, month).then((res) =>
@@ -44,7 +44,7 @@ const User = () => {
   };
 
   const goalConvertToPercent = (time: number) => {
-    const res = time / (goal * 60 * 60 * 1000);
+    const res = time / (goal * 60 * 60);
     return Number(res.toFixed(2))
   };
 

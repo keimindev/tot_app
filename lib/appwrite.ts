@@ -267,7 +267,31 @@ export const getTodayRecords = async (
 
     if (!currentRecords) throw new Error("No records found");
 
-    return currentRecords.documents;
+    const recordsByCategoryMap = (await currentRecords).documents.reduce(
+      (acc, record) => {
+        const category = record.category || "Uncategorized"; // category가 없으면 "Uncategorized"로 처리
+        const recordTime = record.recordTime || 0; // recordTime이 없으면 0으로 처리
+
+        if (!acc[category]) {
+          acc[category] = 0;
+        }
+
+        acc[category] += recordTime;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    // 결과를 배열 형태로 변환
+    const recordsByCategoryArray = Object.entries(recordsByCategoryMap).map(
+      ([category, recordTime]) => ({
+        category,
+        recordTime,
+      })
+    );
+
+    return recordsByCategoryArray;
+    // return currentRecords.documents;
   } catch (error: any) {
     console.log(error);
     throw new Error(error.message || "Failed to get monthly record time sum");

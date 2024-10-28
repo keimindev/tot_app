@@ -33,8 +33,9 @@ const HOME = () => {
       setTotalTimeRecord(res)
     );
 
-    getTodayRecords(user.$id, year, month + 1, today).then((res) =>
+    getTodayRecords(user.$id, year, month + 1, today).then((res) => {
       setTodayRecord(res)
+    }
     );
 
     getTodayTotalRecords(user.$id, year, month + 1, today).then((res) =>

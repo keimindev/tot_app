@@ -7,24 +7,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Stopwatch = () => {
   const [timer, setTimer] = useState("stopwatch");
-  const { user } = useGlobalContext();
+  const { user ,  section} = useGlobalContext();
 
   // State to manage time and stopwatch status
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState<boolean>(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
-
-  // Function to format time as 00:00:00
-  const formatTime = (timeInSeconds: number) => {
-    const hours = String(Math.floor(timeInSeconds / 3600)).padStart(2, "0");
-    const minutes = String(Math.floor((timeInSeconds % 3600) / 60)).padStart(
-      2,
-      "0"
-    );
-    const seconds = String(timeInSeconds % 60).padStart(2, "0");
-    return `${hours}:${minutes}:${seconds}`;
-  };
 
   // Function to start the stopwatch
   const startStopwatch = () => {
@@ -45,7 +34,7 @@ const Stopwatch = () => {
 
   // Function to resume the stopwatch
   const saveStopwatchRecord = () => {
-    saveRecords("reading", user.$id, time)
+    saveRecords(section, user.$id, time)
     router.push('/home')
   };
 
@@ -57,6 +46,10 @@ const Stopwatch = () => {
     setTime(0);
     setRunning(false);
   };
+  function formatTime(time: number): import("react").ReactNode {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <SafeAreaView className="bg-primary h-full justify-center">
       <View className="mb-10">

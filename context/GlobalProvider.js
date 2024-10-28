@@ -10,6 +10,8 @@ const GlobalProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [section, setSection] = useState("");
+
   useEffect(() => {
     getCurrentUser()
       .then((res) => {
@@ -37,6 +39,8 @@ const GlobalProvider = ({ children }) => {
         user,
         setUser,
         loading,
+        section, 
+        setSection,
       }}
     >
       {children}

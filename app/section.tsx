@@ -1,4 +1,5 @@
-import { Link } from "expo-router";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { Link, router } from "expo-router";
 import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -10,6 +11,8 @@ const Section = () => {
     { id: 4, content: "👩🏻‍🍳 Record your cooking time", category: "Cook" },
     { id: 5, content: "🎨 Record your drawing time", category: "Draw" },
   ];
+
+  const { setSection } = useGlobalContext();
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -23,9 +26,14 @@ const Section = () => {
               key={`key-${item.id}`}
               className="text-center bg-secondary m-3 items-center justify-center p-3 rounded-lg"
             >
-              <Link href="/stopwatch">
-                <Text>{item.content}</Text>
-              </Link>
+              <Text
+                onPress={() => {
+                  router.push("/stopwatch");
+                  setSection(item.category);
+                }}
+              >
+                {item.content}
+              </Text>
             </View>
           );
         })}
