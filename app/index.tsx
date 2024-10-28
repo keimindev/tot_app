@@ -11,7 +11,7 @@ const Welcome = () => {
   if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
 
   return (
-    <SafeAreaView className="bg-sky-800 h-full">
+    <SafeAreaView className="bg-primary h-full">
       <ScrollView contentContainerStyle={{height: '100%'}}>
       <View className="w-full h-full px-4 items-center justify-center">
         <Text className="text-xl">Trace of Time</Text>

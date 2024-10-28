@@ -52,17 +52,13 @@ const HOME = () => {
   };
 
   return (
-    <SafeAreaView className="bg-sky-800 h-full">
-      <View className="flex flex-row justify-between mx-5">
-        <Text className="text-lg color-text font-Rsemibold">Welcome To</Text>
-        <Link href="/user">
-          <Image
-            source={{ uri: user.avatar }}
-            className="w-[50px] h-[50px] rounded-full"
-          />
-        </Link>
+    <SafeAreaView className="bg-primary h-full">
+      <View className="flex flex-col mx-5 mt-8">
+        <Text className="text-sm color-text font-Rsemibold">Hello</Text>
+        <Text className="text-lg color-text font-Rsemibold">{user.username}</Text>
       </View>
-      <View className="flex justify-center items-center bg-secondary m-5 px-3 py-3 rounded-lg">
+      <Text>calender section</Text>
+      {/* <View className="flex justify-center items-center bg-secondary m-5 px-3 py-3 rounded-lg">
         <Text>Tracking Time</Text>
         <View className="w-[130px] text-sm bg-white rounded-lg mt-3">
           <TouchableOpacity
@@ -75,7 +71,7 @@ const HOME = () => {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
       <View className="m-5">
         <Text className="text-xl font-Rsemibold color-text">
           Today's Session
@@ -102,7 +98,7 @@ const HOME = () => {
       </View>
       <View className="m-5">
         <Text className="text-xl font-Rsemibold color-text">
-          {isToday(new Date())}
+          This Month Proggress
         </Text>
         <Text className="text-right text-lg text-secondary font-Rbold">
           {formatTimeClock(totalTimeRecord)}

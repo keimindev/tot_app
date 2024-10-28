@@ -53,14 +53,31 @@ const User = () => {
   };
 
   return (
-    <SafeAreaView className="bg-sky-800 h-full">
-      <View className="flex flex-col justify-center items-center mb-5">
+    <SafeAreaView className="bg-primary h-full">
+      {/* <View className="flex flex-col justify-center items-center mb-5 mt-8">
         <Image
           source={{ uri: user.avatar }}
           className="w-[50px] h-[50px] rounded-full"
         />
         <Text className="text-text mt-1">{user.username}</Text>
+      </View> */}
+      <View className="mx-5 mt-8 mb-10">
+        <Text className="text-text font-Rsemibold text-xl">
+          Current Proggress
+        </Text>
+        <View className="flex flex-row justify-center">
+          <Progress.Circle
+            progress={goalConvertToPercent(totalRecord)}
+            size={100}
+            thickness={8}
+            showsText={true}
+            strokeCap={"square"}
+            color={"white"}
+            className="mt-3"
+          />
+        </View>
       </View>
+
       <View className="flex flex-row justify-between items-center py-3 px-5 mx-5 bg-secondary rounded-lg">
         <Text>Goal</Text>
         {!edit ? (
@@ -76,27 +93,12 @@ const User = () => {
         <TouchableOpacity
           onPress={handlePressBtn}
           activeOpacity={0.7}
-          className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-sky-800 rounded-full"
+          className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-primary rounded-full"
         >
           <Text className="text-text font-Rsemibold text-sm">
             {!edit ? "edit" : "save"}
           </Text>
         </TouchableOpacity>
-      </View>
-      <View className="mx-5 mt-5">
-        <View className="flex flex-row justify-between">
-          <Text className="text-secondary">Reach towards the Goal</Text>
-          <Text className="text-secondary">
-            {Number(goalConvertToPercent(totalRecord)) * 100} %
-          </Text>
-        </View>
-        <Progress.Bar
-          progress={goalConvertToPercent(totalRecord)}
-          width={null}
-          height={10}
-          color={"white"}
-          className="mt-3"
-        />
       </View>
 
       {lastMonthRecord.length > 0 ? (

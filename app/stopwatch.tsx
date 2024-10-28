@@ -2,19 +2,24 @@ import { formatTimeClock } from "@/context/formatTime";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { saveRecords } from "@/lib/appwrite";
 import { Link, router } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Stopwatch = () => {
   const [timer, setTimer] = useState("stopwatch");
-  const { user ,  section} = useGlobalContext();
+  const { user, section } = useGlobalContext();
 
   // State to manage time and stopwatch status
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState<boolean>(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
+
+  useEffect(() => {
+    setTime(0);
+    setRunning(false);
+  }, []);
 
   // Function to start the stopwatch
   const startStopwatch = () => {
@@ -35,8 +40,8 @@ const Stopwatch = () => {
 
   // Function to resume the stopwatch
   const saveStopwatchRecord = () => {
-    saveRecords(section, user.$id, time)
-    router.push('/home')
+    saveRecords(section, user.$id, time);
+    router.push("/home");
   };
 
   // Function to reset the stopwatch
@@ -49,7 +54,7 @@ const Stopwatch = () => {
   };
 
   return (
-    <SafeAreaView className="bg-sky-800 h-full justify-center">
+    <SafeAreaView className="bg-primary h-full justify-center">
       <View className="mb-10">
         {timer === "stopwatch" ? (
           <Text className="text-7xl text-center font-Rbold text-white">
@@ -88,13 +93,15 @@ const Stopwatch = () => {
         )}
       </View>
       <View className="mt-5 justify-center items-center">
-      {!running && time > 0 && (
+        {!running && time > 0 && (
           <TouchableOpacity
             onPress={saveStopwatchRecord}
             activeOpacity={0.7}
             className="min-h-[40px] p-5 rounded-lg flex justify-center items-center bg-secondary mb-10"
           >
-            <Text className="text-primary font-Rsemibold text-sm">Record Your Time!</Text>
+            <Text className="text-primary font-Rsemibold text-sm">
+              Record Your Time!
+            </Text>
           </TouchableOpacity>
         )}
         <Link href="/home">
