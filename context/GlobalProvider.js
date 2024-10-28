@@ -11,6 +11,7 @@ const GlobalProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const [section, setSection] = useState("");
+  const [goalTime, setGoalTime] = useState(30);
 
   useEffect(() => {
     getCurrentUser()
@@ -41,6 +42,8 @@ const GlobalProvider = ({ children }) => {
         loading,
         section, 
         setSection,
+        goalTime, 
+        setGoalTime,
       }}
     >
       {children}

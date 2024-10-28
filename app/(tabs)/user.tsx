@@ -1,18 +1,17 @@
 import { getLastMonth, isToday } from "@/context/formatDay";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
 import { getMonthlyRecords, getUserRecords } from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
 
 const User = () => {
-  const { user } = useGlobalContext();
+  const { user, goalTime, setGoalTime } = useGlobalContext();
 
   const [edit, setEdit] = useState(false);
   const [lastMonthRecord, setLastMonthRecord] = useState<any>([]);
-  const [goal, setGoal] = useState<number>(30);
   const [totalRecord, setTotalRecord] = useState<number>(0);
   const [lastMonthTotalRecord, setlastMonthTotalRecord] = useState<number>(0);
 
@@ -31,8 +30,8 @@ const User = () => {
     });
 
     getMonthlyRecords(user.$id, year, month + 1).then((res) => {
-      setTotalRecord(res)}
-    );
+      setTotalRecord(res);
+    });
 
     getMonthlyRecords(user.$id, year, month).then((res) =>
       setlastMonthTotalRecord(res)
@@ -44,15 +43,14 @@ const User = () => {
   };
 
   const goalConvertToPercent = (time: number) => {
-    const res = time / (goal * 60 * 60);
-    return Number(res.toFixed(2))
-  };
-
-  const camparedRecords = (time: number) => {
-    const res = time / (lastMonthTotalRecord);
+    const res = time / (goalTime * 60 * 60);
     return Number(res.toFixed(2));
   };
 
+  const camparedRecords = (time: number) => {
+    const res = time / lastMonthTotalRecord;
+    return Number(res.toFixed(2));
+  };
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -65,7 +63,16 @@ const User = () => {
       </View>
       <View className="flex flex-row justify-between items-center py-3 px-5 mx-5 bg-secondary rounded-lg">
         <Text>Goal</Text>
-        <Text>{goal} hours</Text>
+        {!edit ? (
+          <Text>{goalTime} hours</Text>
+        ) : (
+          <TextInput
+            onChangeText={setGoalTime}
+            value={goalTime}
+            placeholder="Please put only number"
+            keyboardType="numeric"
+          />
+        )}
         <TouchableOpacity
           onPress={handlePressBtn}
           activeOpacity={0.7}
@@ -96,7 +103,9 @@ const User = () => {
         <View className="mx-5 mt-5">
           <View className="flex flex-row justify-between">
             <Text className="text-secondary">Compared to Last Month</Text>
-            <Text className="text-secondary">{Number(camparedRecords(totalRecord)) * 100}%</Text>
+            <Text className="text-secondary">
+              {Number(camparedRecords(totalRecord)) * 100}%
+            </Text>
           </View>
           <Progress.Bar
             progress={camparedRecords(totalRecord)}
