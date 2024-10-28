@@ -53,7 +53,7 @@ const User = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="bg-sky-800 h-full">
       <View className="flex flex-col justify-center items-center mb-5">
         <Image
           source={{ uri: user.avatar }}
@@ -76,7 +76,7 @@ const User = () => {
         <TouchableOpacity
           onPress={handlePressBtn}
           activeOpacity={0.7}
-          className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-primary rounded-full"
+          className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-sky-800 rounded-full"
         >
           <Text className="text-text font-Rsemibold text-sm">
             {!edit ? "edit" : "save"}

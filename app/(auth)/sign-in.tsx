@@ -40,7 +40,7 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView className='bg-primary h-full'>
+    <SafeAreaView className='bg-red-100 h-full'>
       <ScrollView>
         <View className="w-full justify-center min-h-[80vh] px-4 my-6">
         <Text className="text-2xl font-semibold text-white mt-10 font-Rsemibold">

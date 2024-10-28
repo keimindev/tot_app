@@ -49,7 +49,7 @@ const Stopwatch = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full justify-center">
+    <SafeAreaView className="bg-sky-800 h-full justify-center">
       <View className="mb-10">
         {timer === "stopwatch" ? (
           <Text className="text-7xl text-center font-Rbold text-white">
@@ -87,14 +87,14 @@ const Stopwatch = () => {
           </TouchableOpacity>
         )}
       </View>
-      <View className="mt-10">
+      <View className="mt-5 justify-center items-center">
       {!running && time > 0 && (
           <TouchableOpacity
             onPress={saveStopwatchRecord}
             activeOpacity={0.7}
-            className="w-[150px] min-h-[40px] p-5 rounded-lg flex justify-center items-center bg-secondary"
+            className="min-h-[40px] p-5 rounded-lg flex justify-center items-center bg-secondary mb-10"
           >
-            <Text className="text-primary font-Rsemibold text-sm">Resume</Text>
+            <Text className="text-primary font-Rsemibold text-sm">Record Your Time!</Text>
           </TouchableOpacity>
         )}
         <Link href="/home">

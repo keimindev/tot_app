@@ -52,7 +52,7 @@ const HOME = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="bg-sky-800 h-full">
       <View className="flex flex-row justify-between mx-5">
         <Text className="text-lg color-text font-Rsemibold">Welcome To</Text>
         <Link href="/user">

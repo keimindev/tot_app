@@ -21,7 +21,7 @@ const Section = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="bg-sky-800 h-full">
       <View className="flex flex-col">
         <Text className="text-lg font-Rsemibold text-secondary text-center m-5">
           Let&apos;s record your day!
