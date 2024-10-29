@@ -1,10 +1,14 @@
 import { getLastMonth, isToday } from "@/context/formatDay";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
-import { getMonthlyRecords, getUserRecords } from "@/lib/appwrite";
+import {
+  getMonthlyRecords,
+  getUserRecords,
+  getWeeklyRecords,
+} from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { BarChart } from "react-native-gifted-charts";
@@ -16,6 +20,7 @@ const User = () => {
   const [lastMonthRecord, setLastMonthRecord] = useState<any>([]);
   const [totalRecord, setTotalRecord] = useState<number>(0);
   const [lastMonthTotalRecord, setlastMonthTotalRecord] = useState<number>(0);
+  const [weeklyRecord, setWeeklyRecord] = useState<any>([]);
 
   const labelTextStyle = {
     fontSize: 12,
@@ -24,19 +29,20 @@ const User = () => {
   };
 
   const data = [
-    { value: 0.6,  label: "MON", labelTextStyle: labelTextStyle},
-    { value: 0.7, label: 'TUE', labelTextStyle: labelTextStyle },
-    { value: 0.3, label: 'WED', labelTextStyle: labelTextStyle },
-    { value: 0, label: 'THU', labelTextStyle: labelTextStyle },
-    { value: 0, label: 'FRI', labelTextStyle: labelTextStyle },
-    { value: 0, label: 'SAT', labelTextStyle: labelTextStyle },
-    { value: 0, label: 'SUN', labelTextStyle: labelTextStyle },
+    { value: 0.6, label: "MON", labelTextStyle: labelTextStyle },
+    { value: 0.7, label: "TUE", labelTextStyle: labelTextStyle },
+    { value: 0.3, label: "WED", labelTextStyle: labelTextStyle },
+    { value: 0, label: "THU", labelTextStyle: labelTextStyle },
+    { value: 0, label: "FRI", labelTextStyle: labelTextStyle },
+    { value: 0, label: "SAT", labelTextStyle: labelTextStyle },
+    { value: 0, label: "SUN", labelTextStyle: labelTextStyle },
   ];
 
   // 년도 달 구하기
   const today = new Date();
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
+  const day = new Date().getDay();
 
   const handlePressBtn = () => {
     setEdit(!edit);
@@ -54,27 +60,64 @@ const User = () => {
     getMonthlyRecords(user.$id, year, month).then((res) =>
       setlastMonthTotalRecord(res)
     );
-  }, []);
 
-  const capitalize = (ch: string) => {
-    return ch.charAt(0).toUpperCase() + ch.slice(1);
-  };
+    getWeeklyRecords(user.$id, 7, day).then((res) => {
+      getWeek(res);
+    });
+  }, []);
 
   const goalConvertToPercent = (time: number) => {
     const res = time / (goalTime * 60 * 60);
     return Number(res.toFixed(2));
   };
 
-  const camparedRecords = (time: number) => {
-    const res = time / lastMonthTotalRecord;
-    return Number(res.toFixed(2));
-  };
+  const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
+  const getWeek = (
+    weeklyRecords: Array<{ day: number; totalRecordTime: number, dayforString: number }>
+  ) => {
+      const labelTextStyle = {
+        fontSize: 12,
+        fontWeight: 500,
+        color: "#888",
+      };
+
+      const startIndex = weeklyRecords.findIndex((item) => item.dayforString === 0);
+      let transformedData = weeklyRecords.slice(startIndex)
+
+      const recordTransform = (tRecord :any) => {
+        // dayforString 값이 0부터 7까지 포함되도록 보장하는 배열 생성
+        const data = Array.from({ length: 7 }, (_, i) => {
+          // records에서 dayforString이 i인 항목을 찾음
+          const record = tRecord.find((r : any) => r.dayforString === i);
+      
+          // 항목이 있으면 해당 totalRecordTime을 사용하고, 없으면 0으로 설정
+          const num = Number(record?.totalRecordTime) / (goalTime/7*60*60)
+          return {
+            value: record ? num.toFixed(1)|| 0 : 0,
+            label:daysOfWeek[i], // 요일에 해당하는 라벨
+            day: i, // dayforString 값
+            labelTextStyle: labelTextStyle
+          };
+        });
+      
+        return data;
+    };
+    
+    const res = recordTransform(transformedData)
+    console.log(res, 'res')
+    setWeeklyRecord(res);
+  };
 
   const yAxisTextStyle = {
     fontSize: 12,
     color: "#888",
   };
+
+  const getMaxValue = () => {
+    const str = (goalTime/7).toFixed(1)
+    return Number(str)
+  }
 
   return (
     <SafeAreaView className="bg-[#647ce6] h-full">
@@ -100,11 +143,10 @@ const User = () => {
           </Text>
           <View>
             <BarChart
-              maxValue={goalTime/7}
-              data={data}
+              maxValue={getMaxValue()}
+              data={weeklyRecord}
               height={120}
               dashGap={0}
-              dashWidth={0}
               disablePress
               initialSpacing={20}
               spacing={25}

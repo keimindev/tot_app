@@ -327,7 +327,7 @@ export const getTodayTotalRecords = async (
       [
         Query.equal("users", id),
         Query.greaterThanEqual("$createdAt", startDate),
-        Query.lessThan("$createdAt", endDate),
+        Query.lessThanEqual("$createdAt", endDate),
       ]
     );
 
@@ -342,5 +342,56 @@ export const getTodayTotalRecords = async (
   } catch (error: any) {
     console.log(error);
     throw new Error(error.message || "Failed to get monthly record time sum");
+  }
+};
+
+export const getWeeklyRecords = async (
+  id: string,
+  // year: number,
+  // month: number,
+  daysToFetch: number,
+  dayForString: number, 
+) => {
+  try {
+    const currentAccount = await account.get();
+    if (!currentAccount) throw new Error("Account not found");
+
+    const dates = Array.from({ length: daysToFetch }, (_, i) => {
+      const date = new Date();
+      date.setDate(date.getDate() - (daysToFetch - 1 - i)); // 과거부터 오늘까지
+      return date;
+    });
+
+    const weeklyRecords = await Promise.all(
+      dates.map((date) => {
+        const day = date.getDate(); // 일(day) 값
+        const dayforString = date.getDay(); // 요일(day) 값
+        const startDate = new Date(date.getFullYear(), date.getMonth(), day, 0, 0, 0).toISOString();
+        const endDate = new Date(date.getFullYear(), date.getMonth(), day, 23, 59, 59, 999).toISOString();
+
+        return databases
+          .listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.recordCollectionId,
+            [
+              Query.equal("users", id),
+              Query.greaterThanEqual("$createdAt", startDate),
+              Query.lessThan("$createdAt", endDate),
+            ]
+          )
+          .then((records) => {
+            const totalRecordTime = records.documents.reduce((sum, record) => {
+              return sum + (Number(record.recordTime) || 0);
+            }, 0);
+
+            return { day, dayforString, totalRecordTime };
+          });
+      })
+    );
+
+    return weeklyRecords; 
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message || "Failed to get weekly record time sum");
   }
 };
