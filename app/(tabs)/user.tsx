@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
 import { getMonthlyRecords, getUserRecords } from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const User = () => {
   const { user, goalTime, setGoalTime } = useGlobalContext();
@@ -53,92 +54,98 @@ const User = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
-      {/* <View className="flex flex-col justify-center items-center mb-5 mt-8">
-        <Image
-          source={{ uri: user.avatar }}
-          className="w-[50px] h-[50px] rounded-full"
-        />
-        <Text className="text-text mt-1">{user.username}</Text>
-      </View> */}
-      <View className="mx-5 mt-8 mb-10">
-        <Text className="text-text font-Rsemibold text-xl">
+    <SafeAreaView className="bg-[#647ce6] h-full">
+      <View className="py-3">
+        <Text className="text-[#ffffff] font-Rsemibold text-xl text-center">
           Current Proggress
         </Text>
-        <View className="flex flex-row justify-center">
+        <View className="flex flex-row justify-center py-5">
           <Progress.Circle
             progress={goalConvertToPercent(totalRecord)}
-            size={100}
+            size={130}
             thickness={8}
             showsText={true}
-            strokeCap={"square"}
             color={"white"}
             className="mt-3"
           />
         </View>
       </View>
-
-      <View className="flex flex-row justify-between items-center py-3 px-5 mx-5 bg-secondary rounded-lg">
-        <Text>Goal</Text>
-        {!edit ? (
-          <Text>{goalTime} hours</Text>
-        ) : (
-          <TextInput
-            onChangeText={setGoalTime}
-            value={goalTime}
-            placeholder="Please put only number"
-            keyboardType="numeric"
-          />
-        )}
-        <TouchableOpacity
-          onPress={handlePressBtn}
-          activeOpacity={0.7}
-          className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-primary rounded-full"
-        >
-          <Text className="text-text font-Rsemibold text-sm">
-            {!edit ? "edit" : "save"}
+      <View className="bg-[#fff] h-full rounded-t-xl">
+        <View className="m-3">
+          <Text className="text-center font-Rsemibold text-lg">
+            Weekly Track
           </Text>
-        </TouchableOpacity>
-      </View>
-
-      {lastMonthRecord.length > 0 ? (
-        <View className="mx-5 mt-5">
-          <View className="flex flex-row justify-between">
-            <Text className="text-secondary">Compared to Last Month</Text>
-            <Text className="text-secondary">
-              {Number(camparedRecords(totalRecord)) * 100}%
-            </Text>
-          </View>
-          <Progress.Bar
-            progress={camparedRecords(totalRecord)}
-            width={null}
-            height={10}
-            color={"white"}
-            className="mt-3"
-          />
+          <Text>.....</Text>
         </View>
-      ) : (
-        <View></View>
-      )}
-
-      <View className="mx-5 mt-7 bg-secondary rounded-lg p-2">
-        <Text>Last Month Records</Text>
-        <View className="mt-5">
-          <Text>
-            {month != undefined ? getLastMonth(month) : isToday(new Date())}
+        <View className="flex flex-row justify-between items-center py-3 px-5">
+          <View className="bg-[#ff7666] rounded-xl">
+            <Text className="p-3 font-Rsemibold">Goal</Text>
+          </View>
+          {!edit ? (
+            <Text>{goalTime} hours</Text>
+          ) : (
+            <TextInput
+              onChangeText={setGoalTime}
+              value={goalTime}
+              placeholder="Please put only number"
+              keyboardType="numeric"
+            />
+          )}
+          <TouchableOpacity
+            onPress={handlePressBtn}
+            activeOpacity={0.7}
+            className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-[#aab0e6] rounded-2xl"
+          >
+            <Text className="font-Rsemibold text-sm">
+              {!edit ? "edit" : "save"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View className="mx-5 mt-7 rounded-lg p-2">
+          <Text className="text-lg font-Rsemibold">
+            Last Month Your Records
           </Text>
           {lastMonthRecord.length === 0 ? (
-            <Text className="text-center">There are no records</Text>
+            <View></View>
           ) : (
-            lastMonthRecord?.map((item: any) => {
-              return (
-                <View className="flex flex-row justify-between px-2">
-                  <Text className="">{capitalize(item.category)}</Text>
-                  <Text className="">{formatTimeClock(item.recordTime)}</Text>
-                </View>
-              );
-            })
+            <Text className="text-right font-Rsemibold text-xl">
+              {formatTimeClock(lastMonthTotalRecord)}
+            </Text>
           )}
+          <View className="mt-5">
+            {lastMonthRecord.length === 0 ? (
+              <Text className="mt-5 text-lg text-center font-Rmedium text-[#647ce6]">
+                There are no records
+              </Text>
+            ) : (
+              <View>
+                <Text className="font-Rmedium">
+                  {month != undefined
+                    ? getLastMonth(month)
+                    : isToday(new Date())}
+                </Text>
+
+                {lastMonthRecord?.map((item: any) => {
+                  return (
+                    <View
+                      key={`${item.id}-key`}
+                      className="bg-[#647ce6] rounded-lg h-[80px] w-[80px] flex flex-col justify-center items-center m-3"
+                    >
+                      <MaterialIcons
+                        name="library-books"
+                        size={35}
+                        color="black"
+                      />
+                      {/* <Text className="text-sm font-Rregular">{capitalize(record.category)}</Text> */}
+                      <Text className="text-sm font-Rsemibold">
+                        {formatTimeClock(Number(item.recordTime))}
+                      </Text>
+                    </View>
+                  );
+                })}
+              </View>
+            )}
+          </View>
         </View>
       </View>
     </SafeAreaView>

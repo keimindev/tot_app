@@ -1,5 +1,6 @@
 import { formatTimeClock } from "@/context/formatTime";
 import { View, Text } from "react-native";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export interface IRecord {
   id: number;
@@ -20,10 +21,11 @@ const RecordsView: React.FC<RecordsViewProps> = ({record}) => {
   return (
     <View
       key={`${record.id}-key`}
-      className="bg-secondary rounded-full h-[120px] w-[120px] flex flex-col justify-center items-center m-3"
+      className="bg-[#fff] rounded-lg h-[80px] w-[80px] flex flex-col justify-center items-center m-3"
     >
-      <Text className="text-lg font-Rregular">{capitalize(record.category)}</Text>
-      <Text className="text-lg font-Rsemibold">{formatTimeClock(Number(record.recordTime))}</Text>
+       <MaterialIcons name="library-books" size={35} color="black" />
+      {/* <Text className="text-sm font-Rregular">{capitalize(record.category)}</Text> */}
+      <Text className="text-sm font-Rsemibold">{formatTimeClock(Number(record.recordTime))}</Text>
     </View>
   );
 };

@@ -1,6 +1,5 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, Image } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import RecordsView, { IRecord } from "@/components/RecordsView";
@@ -11,7 +10,7 @@ import {
   getUserRecords,
 } from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
-import { isToday } from "@/context/formatDay";
+import Icon from "@/assets/images/timer.svg";
 
 const HOME = () => {
   const { user } = useGlobalContext();
@@ -34,73 +33,73 @@ const HOME = () => {
     );
 
     getTodayRecords(user.$id, year, month + 1, today).then((res) => {
-      setTodayRecord(res)
-    }
-    );
+      setTodayRecord(res);
+    });
 
     getTodayTotalRecords(user.$id, year, month + 1, today).then((res) =>
       setTodayTotalRecord(res)
     );
   }, []);
 
-  const submit = () => {
-    router.replace("/section");
-  };
-
   const capitalize = (ch: string) => {
     return ch.charAt(0).toUpperCase() + ch.slice(1);
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="bg-[#fff] h-full">
       <View className="flex flex-col mx-5 mt-8">
-        <Text className="text-sm color-text font-Rsemibold">Hello</Text>
-        <Text className="text-lg color-text font-Rsemibold">{user.username}</Text>
+        <Text className="text-sm font-Rsemibold">Hello</Text>
+        <Text className="text-lg text-text-highlight font-Rsemibold">
+          {user.username}
+        </Text>
       </View>
-      <Text>calender section</Text>
-      {/* <View className="flex justify-center items-center bg-secondary m-5 px-3 py-3 rounded-lg">
-        <Text>Tracking Time</Text>
-        <View className="w-[130px] text-sm bg-white rounded-lg mt-3">
-          <TouchableOpacity
-            onPress={submit}
-            activeOpacity={0.7}
-            className="min-h-[40px] flex flex-row justify-center items-center"
-          >
-            <Text className="text-primary font-Rsemibold text-sm">
-              Start Timer
+      <View className="h-[100px]">
+        <Text>calender section</Text>
+      </View>
+      <View className="min-h-[200px] m-5 flex flex-row justify-between">
+        <View className="relative">
+          <Icon width={150} height={150} className="absolute top-2"/>
+          <View className="absolute top-20 left-6 transform -translate-x-1/2 -translate-y-1/2">
+            <Text className="text-2xl text-[#fff] font-semibold">
+              {formatTimeClock(todayTotalRecord)}
             </Text>
-          </TouchableOpacity>
+          </View>
         </View>
-      </View> */}
-      <View className="m-5">
-        <Text className="text-xl font-Rsemibold color-text">
-          Today's Session
-        </Text>
-        <View className="flex justify-end">
-          <Text className="text-lg font-Rsemibold color-text text-right">
-            {formatTimeClock(todayTotalRecord)}
-          </Text>
-        </View>
-        <View className="bg-secondary rounded-lg p-3 mt-3">
-          {todayRecord?.length === 0 ? (
-            <Text className="text-center">There are no records</Text>
-          ) : (
-            todayRecord?.map((item: any) => {
-              return (
-                <View className="flex flex-row justify-between px-2">
-                  <Text className="">{capitalize(item.category)}</Text>
-                  <Text className="">{formatTimeClock(item.recordTime)}</Text>
-                </View>
-              );
-            })
-          )}
+        <View>
+          <View>
+            <Text className="text-xl font-Rsemibold text-right">Today</Text>
+            <Text className="text-xl font-Rsemibold text-right">
+              Your Time Tracker
+            </Text>
+          </View>
+          <View className="bg-rounded-lg p-3 mt-3">
+            {todayRecord?.length === 0 ? (
+              <Text className="text-center text-[#647ce6] font-Rsemibold">
+                There are no records
+              </Text>
+            ) : (
+              todayRecord?.map((item: any) => {
+                return (
+                  <View
+                    className="flex flex-row justify-between px-2"
+                    key={`key-${item.id}`}
+                  >
+                    <Text className="text-[#647ce6] font-Rregular">
+                      {capitalize(item.category)}
+                    </Text>
+                    <Text className="text-[#647ce6] font-Rregular">
+                      {formatTimeClock(item.recordTime)}
+                    </Text>
+                  </View>
+                );
+              })
+            )}
+          </View>
         </View>
       </View>
-      <View className="m-5">
-        <Text className="text-xl font-Rsemibold color-text">
-          This Month Proggress
-        </Text>
-        <Text className="text-right text-lg text-secondary font-Rbold">
+      <View className="bg-[#aab0e6] h-full rounded-t-xl p-8">
+        <Text className="text-xl font-Rsemibold">This Month Proggress</Text>
+        <Text className="text-right text-lg font-Rbold">
           {formatTimeClock(totalTimeRecord)}
         </Text>
         <View className="flex flex-row mt-3 items-center justify-center">

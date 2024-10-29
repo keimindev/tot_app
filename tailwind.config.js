@@ -9,13 +9,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#2C4A52",
-        secondary:{
-          DEFAULT: "#537072",
-          // DAD4B5 A73121
-        },
-        text: "#F4EBDB",
+        background: "#FFFFFF",
+        mainColor:  "#647ce6",
+        text: {
+          default: "#ffffff",
+          highlight: "#aab0e6",
       },
+      button:{
+        dafault: "#FF7666"
+      },
+    },
       fontFamily: {
         Rthin: ["RobotoSlab", "sans-serif"],
         Rextralight: ["RobotoSlab-ExtraLight", "sans-serif"],
