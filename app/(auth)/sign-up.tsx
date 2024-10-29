@@ -37,10 +37,10 @@ const SignUp = () => {
 
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="bg-[#fff] h-full">
       <ScrollView>
         <View className="w-full flex justify-center min-h-[80vh] px-4 my-6">
-          <Text className="text-2xl font-semibold text-white mt-10 font-Rsemibold">
+          <Text className="text-2xl font-semibold text-[#647ce6] mt-10 font-Rsemibold">
             Sign Up to T.o.T
           </Text>
           <FormField
@@ -70,12 +70,12 @@ const SignUp = () => {
             isLoading={isSubmitting}
           />
           <View className="flex justify-center pt-5 flex-row gap-2">
-            <Text className="text-lg text-gray-100 font-Rregular">
+            <Text className="text-lg text-[#aab0e6] font-Rregular">
               Have an account already?
             </Text>
             <Link
               href="/sign-in"
-              className="text-lg font-Rsemibold text-secondary"
+              className="text-lg font-Rsemibold text-[#ff7666]"
             >
               Login
             </Link>
