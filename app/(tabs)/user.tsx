@@ -7,6 +7,7 @@ import * as Progress from "react-native-progress";
 import { getMonthlyRecords, getUserRecords } from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { BarChart } from "react-native-gifted-charts";
 
 const User = () => {
   const { user, goalTime, setGoalTime } = useGlobalContext();
@@ -15,6 +16,22 @@ const User = () => {
   const [lastMonthRecord, setLastMonthRecord] = useState<any>([]);
   const [totalRecord, setTotalRecord] = useState<number>(0);
   const [lastMonthTotalRecord, setlastMonthTotalRecord] = useState<number>(0);
+
+  const labelTextStyle = {
+    fontSize: 12,
+    fontWeight: 500,
+    color: "#888",
+  };
+
+  const data = [
+    { value: 0.6,  label: "MON", labelTextStyle: labelTextStyle},
+    { value: 0.7, label: 'TUE', labelTextStyle: labelTextStyle },
+    { value: 0.3, label: 'WED', labelTextStyle: labelTextStyle },
+    { value: 0, label: 'THU', labelTextStyle: labelTextStyle },
+    { value: 0, label: 'FRI', labelTextStyle: labelTextStyle },
+    { value: 0, label: 'SAT', labelTextStyle: labelTextStyle },
+    { value: 0, label: 'SUN', labelTextStyle: labelTextStyle },
+  ];
 
   // 년도 달 구하기
   const today = new Date();
@@ -53,6 +70,12 @@ const User = () => {
     return Number(res.toFixed(2));
   };
 
+
+  const yAxisTextStyle = {
+    fontSize: 12,
+    color: "#888",
+  };
+
   return (
     <SafeAreaView className="bg-[#647ce6] h-full">
       <View className="py-3">
@@ -75,7 +98,26 @@ const User = () => {
           <Text className="text-center font-Rsemibold text-lg">
             Weekly Track
           </Text>
-          <Text>.....</Text>
+          <View>
+            <BarChart
+              maxValue={goalTime/7}
+              data={data}
+              height={120}
+              dashGap={0}
+              dashWidth={0}
+              disablePress
+              initialSpacing={20}
+              spacing={25}
+              barBorderRadius={2}
+              barWidth={20}
+              frontColor={"#FF7666"}
+              xAxisIndicesColor={"#e4e7f7"}
+              xAxisColor={"#e4e7f7"}
+              yAxisTextStyle={yAxisTextStyle}
+              yAxisThickness={0}
+              noOfSections={1}
+            />
+          </View>
         </View>
         <View className="flex flex-row justify-between items-center py-3 px-5">
           <View className="bg-[#ff7666] rounded-xl">
