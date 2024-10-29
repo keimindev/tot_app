@@ -104,7 +104,7 @@ const HOME = () => {
             height={155}
             className="absolute top-2"
           />
-          <View className="absolute top-20 left-6 transform -translate-x-1/2 -translate-y-1/2">
+          <View className="absolute top-20 left-5 transform -translate-x-1/2 -translate-y-1/2">
             <Text className="text-3xl text-[#fff] font-Rbold">
               {formatTimeClock(todayTotalRecord)}
             </Text>
