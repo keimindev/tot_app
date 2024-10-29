@@ -11,6 +11,8 @@ import {
 } from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
 import Icon from "@/assets/images/timer.svg";
+import CalendarStrip from "react-native-calendar-strip";
+import { isToday } from "@/context/formatDay";
 
 const HOME = () => {
   const { user } = useGlobalContext();
@@ -47,18 +49,35 @@ const HOME = () => {
 
   return (
     <SafeAreaView className="bg-[#fff] h-full">
-      <View className="flex flex-col mx-5 mt-8">
-        <Text className="text-sm font-Rsemibold">Hello</Text>
-        <Text className="text-lg text-text-highlight font-Rsemibold">
-          {user.username}
-        </Text>
+      <View className="flex flex-row mx-5 mt-8 justify-between items-center">
+        <View>
+          <Text className="text-sm font-Rsemibold">Hello</Text>
+          <Text className="text-lg text-text-highlight font-Rsemibold">
+            {user.username}
+          </Text>
+        </View>
+        <View>
+          <Text className="text-2xl font-Rsemibold">{isToday(new Date())}</Text>
+        </View>
       </View>
       <View className="h-[100px]">
-        <Text>calender section</Text>
+        <CalendarStrip
+          scrollable
+          showMonth={false}
+          style={{ height: 80, paddingTop: 0, paddingBottom: 0 }}
+          calendarColor={"#ffffff"}
+          calendarHeaderStyle={{ color: "black" }}
+          dateNumberStyle={{ color: "black" }}
+          dateNameStyle={{ color: "black" }}
+          highlightDateContainerStyle={{backgroundColor: "#647ce6"}}
+          iconContainer={{ flex: 0.1 }}
+          highlightDateNumberStyle={{ color: "white" }}
+          highlightDateNameStyle={{ color: "white" }}
+        />
       </View>
-      <View className="min-h-[200px] m-5 flex flex-row justify-between">
+      <View className="min-h-[180px] m-5 mb-10 flex flex-row justify-between">
         <View className="relative">
-          <Icon width={150} height={150} className="absolute top-2"/>
+          <Icon width={150} height={150} className="absolute top-2" />
           <View className="absolute top-20 left-6 transform -translate-x-1/2 -translate-y-1/2">
             <Text className="text-2xl text-[#fff] font-semibold">
               {formatTimeClock(todayTotalRecord)}
