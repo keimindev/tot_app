@@ -21,10 +21,32 @@ const HOME = () => {
   const [totalTimeRecord, setTotalTimeRecord] = useState<number>(0);
   const [todayRecord, setTodayRecord] = useState<any>([]);
   const [todayTotalRecord, setTodayTotalRecord] = useState<number>(0);
+  const [selectedDate, setSelectedDate] = useState(moment());
 
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
   const today = new Date().getDate();
+
+  const fetchRecords = (userId : string, year:number, month:number, day:number) => {
+    return Promise.all([
+      getTodayRecords(userId, year, month, day),
+      getTodayTotalRecords(userId, year, month, day),
+    ]);
+  };
+
+  const handleDateSelect = (date: any) => {
+    setSelectedDate(date); // 선택된 날짜를 상태에 저장
+    const selected = moment(date);
+    const year = selected.year(); // 2024
+    const month = selected.month() + 1; // 10 (0부터 시작하므로 +1)
+    const day = selected.date();
+
+    fetchRecords(user.$id, year, month, day).then(([todayRecordRes, todayTotalRecordRes]) => {
+      setTodayRecord(todayRecordRes);
+      setTodayTotalRecord(todayTotalRecordRes);
+    });
+
+  };
 
   useEffect(() => {
     getUserRecords(user.$id, year, month + 1).then((res) =>
@@ -35,13 +57,10 @@ const HOME = () => {
       setTotalTimeRecord(res)
     );
 
-    getTodayRecords(user.$id, year, month + 1, today).then((res) => {
-      setTodayRecord(res);
+    fetchRecords(user.$id, year, month + 1, today).then(([todayRecordRes, todayTotalRecordRes]) => {
+      setTodayRecord(todayRecordRes);
+      setTodayTotalRecord(todayTotalRecordRes);
     });
-
-    getTodayTotalRecords(user.$id, year, month + 1, today).then((res) =>
-      setTodayTotalRecord(res)
-    );
   }, []);
 
   const capitalize = (ch: string) => {
@@ -73,7 +92,8 @@ const HOME = () => {
           iconContainer={{ flex: 0.1 }}
           highlightDateNumberStyle={{ color: "white" }}
           highlightDateNameStyle={{ color: "white" }}
-          selectedDate={moment()}
+          selectedDate={selectedDate}
+          onDateSelected={handleDateSelect}
         />
       </View>
       <View className="min-h-[180px] m-5 mb-10 flex flex-row justify-between">
