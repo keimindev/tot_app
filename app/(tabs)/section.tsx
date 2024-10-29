@@ -2,18 +2,11 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { router } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Icon from "@/assets/icon";
+import { categoryList } from "@/context/category";
 
 
 const Section = () => {
-  const list = [
-    { id: 1, iconId: "library-books", category: "reading",},
-    { id: 2, iconId: "edit-note", category: "study" },
-    { id: 3, iconId: "directions-run", category: "workout" },
-    { id: 4, iconId: "draw", category: "drawing" },
-    { id: 5, iconId: "videogame-asset", category: "game" },
-  ];
-
   const { setSection } = useGlobalContext();
 
   const capitalize = (ch: string) => {
@@ -27,7 +20,7 @@ const Section = () => {
           Let&apos;s record your day!
         </Text>
         <View className="flex flex-wrap flex-row justify-center items-center mt-5">
-          {list.map((item) => {
+          {categoryList.map((item) => {
             return (
               <View key={`key-${item.id}`} className="w-[130px] h-[130px] m-3 bg-[#fff] rounded-full text-center">
                 <TouchableOpacity
@@ -38,7 +31,7 @@ const Section = () => {
                   activeOpacity={0.7}
                   className="flex justify-center items-center text-center h-[130px]"
                 >
-                  <MaterialIcons name={item.iconId as any} size={55} color="black" />
+                  <Icon name={item.iconId as any} width={50} height={50}/>
                   <Text className="text-sm font-Rsemibold">{capitalize(item.category)}</Text>
                 </TouchableOpacity>
               </View>

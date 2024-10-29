@@ -1,0 +1,6 @@
+export {default as timerIcon} from './timer.svg'
+export {default as workoutIcon} from './workout.svg'
+export {default as readingIcon} from './reading.svg'
+export {default as studyIcon} from './writing.svg'
+export {default as drawingIcon} from './draw.svg'
+export {default as gameIcon} from './game.svg'

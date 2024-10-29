@@ -2,12 +2,11 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { Redirect, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-
 const AuthLayout = () => {
   const { loading, isLogged } = useGlobalContext();
 
   if (!loading && isLogged) return <Redirect href="/home" />;
-  
+
   return (
     <>
       <Stack>
@@ -24,7 +23,7 @@ const AuthLayout = () => {
           }}
         />
 
-<StatusBar backgroundColor="#161622" style="light" />
+        <StatusBar backgroundColor="#161622" style="light" />
       </Stack>
     </>
   );

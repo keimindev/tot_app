@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -10,9 +10,10 @@ import {
   getUserRecords,
 } from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
-import Icon from "@/assets/images/timer.svg";
 import CalendarStrip from "react-native-calendar-strip";
 import { isToday } from "@/context/formatDay";
+import moment from "moment";
+import Icon from "@/assets/icon";
 
 const HOME = () => {
   const { user } = useGlobalContext();
@@ -62,22 +63,27 @@ const HOME = () => {
       </View>
       <View className="h-[100px]">
         <CalendarStrip
-          scrollable
           showMonth={false}
           style={{ height: 80, paddingTop: 0, paddingBottom: 0 }}
           calendarColor={"#ffffff"}
           calendarHeaderStyle={{ color: "black" }}
           dateNumberStyle={{ color: "black" }}
           dateNameStyle={{ color: "black" }}
-          highlightDateContainerStyle={{backgroundColor: "#647ce6"}}
+          highlightDateContainerStyle={{ backgroundColor: "#647ce6" }}
           iconContainer={{ flex: 0.1 }}
           highlightDateNumberStyle={{ color: "white" }}
           highlightDateNameStyle={{ color: "white" }}
+          selectedDate={moment()}
         />
       </View>
       <View className="min-h-[180px] m-5 mb-10 flex flex-row justify-between">
         <View className="relative">
-          <Icon width={150} height={150} className="absolute top-2" />
+          <Icon
+            name="timerIcon"
+            width={150}
+            height={150}
+            className="absolute top-2"
+          />
           <View className="absolute top-20 left-6 transform -translate-x-1/2 -translate-y-1/2">
             <Text className="text-2xl text-[#fff] font-semibold">
               {formatTimeClock(todayTotalRecord)}

@@ -1,1 +1,0 @@
-export {default as timerIcon} from './timer.svg';
