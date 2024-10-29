@@ -100,12 +100,12 @@ const HOME = () => {
         <View className="relative">
           <Icon
             name="timerIcon"
-            width={150}
-            height={150}
+            width={155}
+            height={155}
             className="absolute top-2"
           />
           <View className="absolute top-20 left-6 transform -translate-x-1/2 -translate-y-1/2">
-            <Text className="text-2xl text-[#fff] font-semibold">
+            <Text className="text-3xl text-[#fff] font-Rbold">
               {formatTimeClock(todayTotalRecord)}
             </Text>
           </View>
