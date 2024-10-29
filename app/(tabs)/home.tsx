@@ -127,7 +127,7 @@ const HOME = () => {
                 return (
                   <View
                     className="flex flex-row justify-between px-2"
-                    key={`key-${item.id}`}
+                    key={`key-${item.category}`}
                   >
                     <Text className="text-[#647ce6] font-Rregular">
                       {capitalize(item.category)}

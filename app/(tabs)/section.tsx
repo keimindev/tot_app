@@ -22,7 +22,7 @@ const Section = () => {
         <View className="flex flex-wrap flex-row justify-center items-center mt-5">
           {categoryList.map((item) => {
             return (
-              <View key={`key-${item.id}`} className="w-[130px] h-[130px] m-3 bg-[#fff] rounded-full text-center">
+              <View key={`key-${item.category}`} className="w-[130px] h-[130px] m-3 bg-[#fff] rounded-full text-center">
                 <TouchableOpacity
                   onPress={() => {
                     router.push("/stopwatch");

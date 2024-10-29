@@ -30,8 +30,8 @@ const User = () => {
   const day = new Date().getDay();
 
   const handlePressBtn = () => {
-    if(edit){
-      saveGoalTime(user.$id, Number(goalTime))
+    if (edit) {
+      saveGoalTime(user.$id, Number(goalTime));
     }
     setEdit(!edit);
   };
@@ -61,39 +61,46 @@ const User = () => {
 
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
+  let result = [];
   const getWeek = (
-    weeklyRecords: Array<{ day: number; totalRecordTime: number, dayforString: number }>
+    weeklyRecords: Array<{
+      day: number;
+      totalRecordTime: number;
+      dayforString: number;
+    }>
   ) => {
-      const labelTextStyle = {
-        fontSize: 12,
-        fontWeight: 500,
-        color: "#888",
-      };
-
-      const startIndex = weeklyRecords.findIndex((item) => item.dayforString === 0);
-      let transformedData = weeklyRecords.slice(startIndex)
-
-      const recordTransform = (tRecord :any) => {
-        // dayforString 값이 0부터 7까지 포함되도록 보장하는 배열 생성
-        const data = Array.from({ length: 7 }, (_, i) => {
-          // records에서 dayforString이 i인 항목을 찾음
-          const record = tRecord.find((r : any) => r.dayforString === i);
-      
-          // 항목이 있으면 해당 totalRecordTime을 사용하고, 없으면 0으로 설정
-          const num = Number(record?.totalRecordTime) / (goalTime/7*60*60)
-          return {
-            value: record ? num.toFixed(1)|| 0 : 0,
-            label:daysOfWeek[i], // 요일에 해당하는 라벨
-            day: i, // dayforString 값
-            labelTextStyle: labelTextStyle
-          };
-        });
-      
-        return data;
+    const labelTextStyle = {
+      fontSize: 12,
+      fontWeight: 500,
+      color: "#888",
     };
-    
-    const res = recordTransform(transformedData)
-    setWeeklyRecord(res);
+
+    for (let i = 0; i < 8; i++) {
+      const haveIt = weeklyRecords.find((item) => item.dayforString === i);
+      const transformedNum = (num : number) => {
+        const total = ((num / 3600) / (goalTime/(4*7))).toFixed(1)
+        return Number(total)
+      }
+      if (haveIt) {
+        result.push({
+          day: haveIt.day,
+          dayforString: haveIt.dayforString,
+          label: daysOfWeek[haveIt.dayforString],
+          value: transformedNum(haveIt.totalRecordTime) || 0,
+          labelTextStyle: labelTextStyle,
+        });
+      } else {
+        result.push({
+          day: i,
+          dayforString: i,
+          label: daysOfWeek[i],
+          value: 0,
+          labelTextStyle: labelTextStyle,
+        });
+      }
+    }
+    console.log(result, 'resut')
+    setWeeklyRecord(result);
   };
 
   const yAxisTextStyle = {
@@ -102,9 +109,9 @@ const User = () => {
   };
 
   const getMaxValue = () => {
-    const str = (goalTime/7).toFixed(1)
-    return Number(str)
-  }
+    const str = (goalTime / (4*7)).toFixed(1);
+    return Number(str);
+  };
 
   return (
     <SafeAreaView className="bg-[#647ce6] h-full">
