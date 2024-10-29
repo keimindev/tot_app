@@ -141,6 +141,23 @@ export async function saveRecords(category: string, id: string, time: number) {
   }
 }
 
+export const saveGoalTime = async ( documentId: string, time : number) => {
+  try{
+    const res = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      documentId,
+      {
+        goalTime: time
+      }
+    );
+
+    return res
+  }catch(error: any){
+    console.log(error)
+  }
+}
+
 // Get records
 export const getUserRecords = async (id: string, year: number,
   month: number) => {
@@ -347,10 +364,7 @@ export const getTodayTotalRecords = async (
 
 export const getWeeklyRecords = async (
   id: string,
-  // year: number,
-  // month: number,
   daysToFetch: number,
-  dayForString: number, 
 ) => {
   try {
     const currentAccount = await account.get();

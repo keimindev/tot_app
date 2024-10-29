@@ -19,6 +19,7 @@ const GlobalProvider = ({ children }) => {
         if (res) {
           setIsLogged(true);
           setUser(res);
+          setGoalTime(res.goalTime)
         } else {
           setIsLogged(false);
           setUser(null);

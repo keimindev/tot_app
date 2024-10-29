@@ -8,6 +8,7 @@ import {
   getMonthlyRecords,
   getUserRecords,
   getWeeklyRecords,
+  saveGoalTime,
 } from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -22,22 +23,6 @@ const User = () => {
   const [lastMonthTotalRecord, setlastMonthTotalRecord] = useState<number>(0);
   const [weeklyRecord, setWeeklyRecord] = useState<any>([]);
 
-  const labelTextStyle = {
-    fontSize: 12,
-    fontWeight: 500,
-    color: "#888",
-  };
-
-  const data = [
-    { value: 0.6, label: "MON", labelTextStyle: labelTextStyle },
-    { value: 0.7, label: "TUE", labelTextStyle: labelTextStyle },
-    { value: 0.3, label: "WED", labelTextStyle: labelTextStyle },
-    { value: 0, label: "THU", labelTextStyle: labelTextStyle },
-    { value: 0, label: "FRI", labelTextStyle: labelTextStyle },
-    { value: 0, label: "SAT", labelTextStyle: labelTextStyle },
-    { value: 0, label: "SUN", labelTextStyle: labelTextStyle },
-  ];
-
   // 년도 달 구하기
   const today = new Date();
   const month = new Date().getMonth();
@@ -45,6 +30,9 @@ const User = () => {
   const day = new Date().getDay();
 
   const handlePressBtn = () => {
+    if(edit){
+      saveGoalTime(user.$id, Number(goalTime))
+    }
     setEdit(!edit);
   };
 
@@ -61,7 +49,7 @@ const User = () => {
       setlastMonthTotalRecord(res)
     );
 
-    getWeeklyRecords(user.$id, 7, day).then((res) => {
+    getWeeklyRecords(user.$id, day).then((res) => {
       getWeek(res);
     });
   }, []);
@@ -105,7 +93,6 @@ const User = () => {
     };
     
     const res = recordTransform(transformedData)
-    console.log(res, 'res')
     setWeeklyRecord(res);
   };
 
