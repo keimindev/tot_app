@@ -23,11 +23,11 @@ const FormField = ({
 
   return (
     <View className={`space-y-2 ${otherStyles}`}>
-      <Text className="text-base text-gray-100 font-Rmedium">{title}</Text>
+      <Text className="font-Rmedium">{title}</Text>
 
-      <View className="w-full h-14 px-4 bg-white-100 rounded-2xl border-2 border-white focus:border-secondary flex flex-row items-center">
+      <View className="w-full h-14 px-4 bg-[#fff] rounded-2xl border-2 border-white focus:border-secondary flex flex-row items-center">
         <TextInput
-          className="flex-1 text-white font-Rsemibold text-base"
+          className="flex-1 bg-[#fff] font-Rsemibold text-base"
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#7B7B8B"

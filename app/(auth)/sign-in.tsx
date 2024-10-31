@@ -40,10 +40,10 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView className='bg-[#fff] h-full'>
+    <SafeAreaView className='bg-[#647ce6] h-full'>
       <ScrollView>
         <View className="w-full justify-center min-h-[80vh] px-4 my-6">
-        <Text className="text-2xl font-semibold text-[#647ce6] mt-10 font-Rsemibold">
+        <Text className="text-2xl font-semibold text-[#fff] mt-10 font-Rsemibold">
             Log in to T.o.T
           </Text>
         
@@ -73,7 +73,7 @@ const SignIn = () => {
             </Text>
             <Link
               href="/sign-up"
-              className="text-lg font-Rsemibold text-[#ff7666]"
+              className="text-lg font-Rsemibold text-[#fff]"
             >
               Signup
             </Link>

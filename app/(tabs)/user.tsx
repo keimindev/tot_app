@@ -99,7 +99,6 @@ const User = () => {
         });
       }
     }
-    console.log(result, 'resut')
     setWeeklyRecord(result);
   };
 

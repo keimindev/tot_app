@@ -37,10 +37,10 @@ const SignUp = () => {
 
 
   return (
-    <SafeAreaView className="bg-[#fff] h-full">
+    <SafeAreaView className="bg-[#647ce6] h-full">
       <ScrollView>
         <View className="w-full flex justify-center min-h-[80vh] px-4 my-6">
-          <Text className="text-2xl font-semibold text-[#647ce6] mt-10 font-Rsemibold">
+          <Text className="text-2xl font-semibold text-[#fff] mt-10 font-Rsemibold">
             Sign Up to T.o.T
           </Text>
           <FormField
@@ -64,7 +64,7 @@ const SignUp = () => {
             otherStyles="mt-7"
           />
           <CustomButton
-            title="Sign In"
+            title="Sign Up"
             handlePress={submit}
             containerStyles="mt-7"
             isLoading={isSubmitting}

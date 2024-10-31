@@ -67,6 +67,11 @@ const HOME = () => {
     return ch.charAt(0).toUpperCase() + ch.slice(1);
   };
 
+  const marked = [{
+    date: moment('2024-10-30'),
+    dots:[{color: '#647ce6'}]
+  }]
+
   return (
     <SafeAreaView className="bg-[#fff] h-full">
       <View className="flex flex-row mx-5 mt-8 justify-between items-center">
@@ -94,9 +99,10 @@ const HOME = () => {
           highlightDateNameStyle={{ color: "white" }}
           selectedDate={selectedDate}
           onDateSelected={handleDateSelect}
+          markedDates={marked}
         />
       </View>
-      <View className="min-h-[180px] m-5 mb-10 flex flex-row justify-between">
+      <View className="min-h-[200px] m-5 mt-20 mb-10 flex flex-row justify-between">
         <View className="relative">
           <Icon
             name="timerIcon"
