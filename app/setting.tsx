@@ -7,13 +7,14 @@ import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Setting = () => {
-  const { user } = useGlobalContext();
+  const { user,username, setUsername } = useGlobalContext();
   const [edit, setEdit] = useState(false);
-  const [username, setUsername] = useState(user.username);
+  const [name, setName]= useState(username)
 
   const handlePressBtn = () => {
     if (edit) {
-      updateYourname(user.$id, username);
+      updateYourname(user.$id, name);
+      setUsername(name)
     }
     setEdit(!edit);
   };
@@ -25,11 +26,11 @@ const Setting = () => {
           <CollapsibleView title="Set Your Profile" color="white">
             <View className="flex flex-row justify-between mt-5">
               {!edit ? (
-                <Text className="text-lg font-Rsemibold">{username}</Text>
+                <Text className="text-lg font-Rsemibold">{name}</Text>
               ) : (
                 <TextInput
-                  onChangeText={setUsername}
-                  value={username}
+                  onChangeText={setName}
+                  value={name}
                   placeholder="Please put only number"
                   keyboardType="numeric"
                   className="text-lg font-Rsemibold"

@@ -12,6 +12,7 @@ const GlobalProvider = ({ children }) => {
 
   const [section, setSection] = useState("");
   const [goalTime, setGoalTime] = useState(30);
+  const [username, setUsername] = useState("")
 
   useEffect(() => {
     getCurrentUser()
@@ -20,6 +21,7 @@ const GlobalProvider = ({ children }) => {
           setIsLogged(true);
           setUser(res);
           setGoalTime(res.goalTime)
+          setUsername(res.username)
         } else {
           setIsLogged(false);
           setUser(null);
@@ -31,7 +33,7 @@ const GlobalProvider = ({ children }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [username]);
 
   return (
     <GlobalContext.Provider
@@ -45,6 +47,8 @@ const GlobalProvider = ({ children }) => {
         setSection,
         goalTime, 
         setGoalTime,
+        username, 
+        setUsername,
       }}
     >
       {children}
