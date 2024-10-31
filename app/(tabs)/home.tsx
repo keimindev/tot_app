@@ -106,8 +106,6 @@ const HOME = () => {
 
   const handleWeekChange = (startOfWeek : any) => {
     setCurrentWeekStart(startOfWeek.add(6, 'days'));
-    // setCurrentMonth(startOfWeek.format('MM')); // 주 시작 날짜 기준으로 월 업데이트
-    // setCurrentYear(startOfWeek.format('YYYY'))
     getWeeklyRecords(user.$id, startOfWeek, 7).then((res) => {
       checkingForMark(res);
     });
