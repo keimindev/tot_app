@@ -8,6 +8,7 @@ import {
   getTodayRecords,
   getTodayTotalRecords,
   getUserRecords,
+  getWeeklyRecords,
 } from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
 import CalendarStrip from "react-native-calendar-strip";
@@ -22,12 +23,19 @@ const HOME = () => {
   const [todayRecord, setTodayRecord] = useState<any>([]);
   const [todayTotalRecord, setTodayTotalRecord] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState(moment());
+  const [markedDate, setMarkedDate] = useState([]);
 
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
   const today = new Date().getDate();
+  const dayToFetch = new Date().getDay();
 
-  const fetchRecords = (userId : string, year:number, month:number, day:number) => {
+  const fetchRecords = (
+    userId: string,
+    year: number,
+    month: number,
+    day: number
+  ) => {
     return Promise.all([
       getTodayRecords(userId, year, month, day),
       getTodayTotalRecords(userId, year, month, day),
@@ -41,11 +49,12 @@ const HOME = () => {
     const month = selected.month() + 1; // 10 (0부터 시작하므로 +1)
     const day = selected.date();
 
-    fetchRecords(user.$id, year, month, day).then(([todayRecordRes, todayTotalRecordRes]) => {
-      setTodayRecord(todayRecordRes);
-      setTodayTotalRecord(todayTotalRecordRes);
-    });
-
+    fetchRecords(user.$id, year, month, day).then(
+      ([todayRecordRes, todayTotalRecordRes]) => {
+        setTodayRecord(todayRecordRes);
+        setTodayTotalRecord(todayTotalRecordRes);
+      }
+    );
   };
 
   useEffect(() => {
@@ -57,9 +66,15 @@ const HOME = () => {
       setTotalTimeRecord(res)
     );
 
-    fetchRecords(user.$id, year, month + 1, today).then(([todayRecordRes, todayTotalRecordRes]) => {
-      setTodayRecord(todayRecordRes);
-      setTodayTotalRecord(todayTotalRecordRes);
+    fetchRecords(user.$id, year, month + 1, today).then(
+      ([todayRecordRes, todayTotalRecordRes]) => {
+        setTodayRecord(todayRecordRes);
+        setTodayTotalRecord(todayTotalRecordRes);
+      }
+    );
+
+    getWeeklyRecords(user.$id, dayToFetch).then((res) => {
+      checkingForMark(res);
     });
   }, []);
 
@@ -67,10 +82,20 @@ const HOME = () => {
     return ch.charAt(0).toUpperCase() + ch.slice(1);
   };
 
-  const marked = [{
-    date: moment('2024-10-30'),
-    dots:[{color: '#647ce6'}]
-  }]
+  const checkingForMark = (week: any) => {
+    const marked = week
+      .filter((day: any) => day.totalRecordTime > 0) // totalRecordTime이 0보다 큰 요소만 필터링
+      .map((item: any) => ({
+        date: moment(
+          `${year}-${(month + 1).toString().padStart(2, "0")}-${item.day
+            .toString()
+            .padStart(2, "0")}`
+        ),
+        dots: [{ color: "#647ce6", selectedColor: "white" }],
+      }));
+
+    setMarkedDate(marked);
+  };
 
   return (
     <SafeAreaView className="bg-[#fff] h-full">
@@ -99,7 +124,7 @@ const HOME = () => {
           highlightDateNameStyle={{ color: "white" }}
           selectedDate={selectedDate}
           onDateSelected={handleDateSelect}
-          markedDates={marked}
+          markedDates={markedDate}
         />
       </View>
       <View className="min-h-[200px] m-5 mt-20 mb-10 flex flex-row justify-between">
