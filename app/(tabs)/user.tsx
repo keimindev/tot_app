@@ -22,6 +22,7 @@ const User = () => {
   const [totalRecord, setTotalRecord] = useState<number>(0);
   const [lastMonthTotalRecord, setlastMonthTotalRecord] = useState<number>(0);
   const [weeklyRecord, setWeeklyRecord] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 년도 달 구하기
   const today = new Date();
@@ -50,6 +51,7 @@ const User = () => {
     );
 
     getWeeklyRecords(user.$id, day).then((res) => {
+      setIsLoading(true)
       getWeek(res);
     });
   }, []);
@@ -134,7 +136,7 @@ const User = () => {
           <Text className="text-center font-Rsemibold text-lg">
             Weekly Track
           </Text>
-          <View>
+         {isLoading && <View>
             <BarChart
               maxValue={getMaxValue()}
               data={weeklyRecord}
@@ -152,7 +154,7 @@ const User = () => {
               yAxisThickness={0}
               noOfSections={1}
             />
-          </View>
+          </View>} 
         </View>
         <View className="flex flex-row justify-between items-center py-3 px-5">
           <View className="bg-[#ff7666] rounded-xl">
