@@ -381,14 +381,16 @@ export const getTodayTotalRecords = async (
 
 export const getWeeklyRecords = async (
   id: string,
+  selectedDate : any,
   daysToFetch: number,
 ) => {
   try {
     const currentAccount = await account.get();
     if (!currentAccount) throw new Error("Account not found");
 
+    console.log(selectedDate, 'date', new Date())
     const dates = Array.from({ length: daysToFetch }, (_, i) => {
-      const date = new Date();
+      const date = new Date(selectedDate)
       date.setDate(date.getDate() - (daysToFetch - 1 - i)); // 과거부터 오늘까지
       return date;
     });

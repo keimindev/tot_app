@@ -28,11 +28,11 @@ const CollapsibleView = ({ title, color, children }: CollapsibleViewProps) => {
   return (
     <View>
       <TouchableWithoutFeedback onPress={toggleCollapse}>
-        <View>
+        <View className="bg-[#647ce6] p-4 rounded-xl">
           <Text className={`text-${color} font-Rsemibold`}>{title}</Text>
         </View>
       </TouchableWithoutFeedback>
-      <Animated.View style={{ height: heightInterpolate, overflow: "hidden" }}>
+      <Animated.View style={{ height: heightInterpolate, overflow: "hidden"}}>
         {collapsed ? null : children}
       </Animated.View>
     </View>

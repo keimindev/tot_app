@@ -15,6 +15,7 @@ const Setting = () => {
     if (edit) {
       updateYourname(user.$id, name);
       setUsername(name)
+      
     }
     setEdit(!edit);
   };
@@ -22,11 +23,11 @@ const Setting = () => {
   return (
     <SafeAreaView className="bg-[#fff] h-full">
       <View className="m-3">
-        <View className="bg-[#647ce6] p-4 rounded-xl mb-2">
+        <View className="mb-2">
           <CollapsibleView title="Set Your Profile" color="white">
-            <View className="flex flex-row justify-between mt-5">
-              {!edit ? (
-                <Text className="text-lg font-Rsemibold">{name}</Text>
+            <View className="flex flex-row justify-between mt-3 px-5 rounded-xl">
+              {!edit? (
+                <Text className="text-lg font-Rsemibold mt-2">{name}</Text>
               ) : (
                 <TextInput
                   onChangeText={setName}
@@ -49,10 +50,10 @@ const Setting = () => {
             </View>
           </CollapsibleView>
         </View>
-        <View className="bg-[#647ce6] p-4 rounded-xl mb-2">
+        <View className="mb-2">
           <CollapsibleView title="About App" color="white">
-            <View className="mt-5">
-              <Text className="text-[#fff] font-Rregular">
+            <View className="mt-3 px-5">
+              <Text className="font-Rregular">
                 This appp is....
               </Text>
             </View>

@@ -51,7 +51,7 @@ const User = () => {
       setlastMonthTotalRecord(res)
     );
 
-    getWeeklyRecords(user.$id, day).then((res) => {
+    getWeeklyRecords(user.$id, today, day).then((res) => {
       setIsLoading(true);
       getWeek(res);
     });

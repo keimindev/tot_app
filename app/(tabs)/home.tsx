@@ -12,7 +12,7 @@ import {
 } from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
 import CalendarStrip from "react-native-calendar-strip";
-import { isToday } from "@/context/formatDay";
+import { findYearMonth, isToday } from "@/context/formatDay";
 import moment from "moment";
 import Icon from "@/assets/icon";
 
@@ -24,6 +24,9 @@ const HOME = () => {
   const [todayTotalRecord, setTodayTotalRecord] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState(moment());
   const [markedDate, setMarkedDate] = useState([]);
+  const [currentMonth, setCurrentMonth] = useState(moment().format('MM'));
+  const [currentYear, setCurrentYear] = useState(moment().format('YYYY')); // 초기 연도 설정
+  const [currentWeekStart, setCurrentWeekStart] = useState(moment());
 
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
@@ -55,6 +58,9 @@ const HOME = () => {
         setTodayTotalRecord(todayTotalRecordRes);
       }
     );
+
+    setCurrentMonth(selected.format('MM')); // 주 시작 날짜 기준으로 월 업데이트
+    setCurrentYear(selected.format('YYYY'))
   };
 
   useEffect(() => {
@@ -73,9 +79,10 @@ const HOME = () => {
       }
     );
 
-    getWeeklyRecords(user.$id, dayToFetch).then((res) => {
+    getWeeklyRecords(user.$id, selectedDate, dayToFetch).then((res) => {
       checkingForMark(res);
     });
+
   }, []);
 
   const capitalize = (ch: string) => {
@@ -97,6 +104,15 @@ const HOME = () => {
     setMarkedDate(marked);
   };
 
+  const handleWeekChange = (startOfWeek : any) => {
+    setCurrentWeekStart(startOfWeek.add(6, 'days'));
+    // setCurrentMonth(startOfWeek.format('MM')); // 주 시작 날짜 기준으로 월 업데이트
+    // setCurrentYear(startOfWeek.format('YYYY'))
+    getWeeklyRecords(user.$id, startOfWeek, 7).then((res) => {
+      checkingForMark(res);
+    });
+  };
+
   return (
     <SafeAreaView className="bg-[#fff] h-full">
       <View className="flex flex-row mx-5 mt-8 justify-between items-center">
@@ -107,7 +123,7 @@ const HOME = () => {
           </Text>
         </View>
         <View>
-          <Text className="text-2xl font-Rsemibold">{isToday(new Date())}</Text>
+          <Text className="text-2xl font-Rsemibold">{findYearMonth(currentYear,currentMonth)}</Text>
         </View>
       </View>
       <View className="h-[100px]">
@@ -123,6 +139,7 @@ const HOME = () => {
           highlightDateNumberStyle={{ color: "white" }}
           highlightDateNameStyle={{ color: "white" }}
           selectedDate={selectedDate}
+          onWeekChanged={handleWeekChange}
           onDateSelected={handleDateSelect}
           markedDates={markedDate}
         />

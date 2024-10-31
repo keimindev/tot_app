@@ -15,6 +15,15 @@ export const isToday = (date : any) =>{
 
 }
 
+export const findYearMonth = (year : string, month: string) => {
+  const months = [
+    "January", "Feburary", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+    ];
+
+  return `${months[Number(month)-1]} ${year}`;
+}
+
 
 export const getLastMonth = (date: number) =>{
 
