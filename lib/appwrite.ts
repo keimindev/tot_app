@@ -158,6 +158,23 @@ export const saveGoalTime = async ( documentId: string, time : number) => {
   }
 }
 
+export const updateYourname = async ( documentId: string, name : string) => {
+  try{
+    const res = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      documentId,
+      {
+        username: name
+      }
+    );
+
+    return res
+  }catch(error: any){
+    console.log(error)
+  }
+}
+
 // Get records
 export const getUserRecords = async (id: string, year: number,
   month: number) => {
