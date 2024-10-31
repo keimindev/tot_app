@@ -13,6 +13,7 @@ import {
 import { formatTimeClock } from "@/context/formatTime";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { BarChart } from "react-native-gifted-charts";
+import { Link } from "expo-router";
 
 const User = () => {
   const { user, goalTime, setGoalTime } = useGlobalContext();
@@ -51,7 +52,7 @@ const User = () => {
     );
 
     getWeeklyRecords(user.$id, day).then((res) => {
-      setIsLoading(true)
+      setIsLoading(true);
       getWeek(res);
     });
   }, []);
@@ -79,10 +80,10 @@ const User = () => {
 
     for (let i = 0; i < 8; i++) {
       const haveIt = weeklyRecords.find((item) => item.dayforString === i);
-      const transformedNum = (num : number) => {
-        const total = ((num / 3600) / (goalTime/(4*7))).toFixed(1)
-        return Number(total)
-      }
+      const transformedNum = (num: number) => {
+        const total = (num / 3600 / (goalTime / (4 * 7))).toFixed(1);
+        return Number(total);
+      };
       if (haveIt) {
         result.push({
           day: haveIt.day,
@@ -110,13 +111,18 @@ const User = () => {
   };
 
   const getMaxValue = () => {
-    const str = (goalTime / (4*7)).toFixed(1);
+    const str = (goalTime / (4 * 7)).toFixed(1);
     return Number(str);
   };
 
   return (
     <SafeAreaView className="bg-[#647ce6] h-full">
       <View className="py-3">
+        <View className="flex flex-row justify-end px-3">
+          <Link href="/setting">
+            <MaterialIcons name="settings" size={24} color={"white"} />
+          </Link>
+        </View>
         <Text className="text-[#ffffff] font-Rsemibold text-xl text-center">
           Current Proggress
         </Text>
@@ -136,25 +142,27 @@ const User = () => {
           <Text className="text-center font-Rsemibold text-lg">
             Weekly Track
           </Text>
-         {isLoading && <View>
-            <BarChart
-              maxValue={getMaxValue()}
-              data={weeklyRecord}
-              height={120}
-              dashGap={0}
-              disablePress
-              initialSpacing={20}
-              spacing={25}
-              barBorderRadius={2}
-              barWidth={20}
-              frontColor={"#FF7666"}
-              xAxisIndicesColor={"#e4e7f7"}
-              xAxisColor={"#e4e7f7"}
-              yAxisTextStyle={yAxisTextStyle}
-              yAxisThickness={0}
-              noOfSections={1}
-            />
-          </View>} 
+          {isLoading && (
+            <View>
+              <BarChart
+                maxValue={getMaxValue()}
+                data={weeklyRecord}
+                height={120}
+                dashGap={0}
+                disablePress
+                initialSpacing={20}
+                spacing={25}
+                barBorderRadius={2}
+                barWidth={20}
+                frontColor={"#FF7666"}
+                xAxisIndicesColor={"#e4e7f7"}
+                xAxisColor={"#e4e7f7"}
+                yAxisTextStyle={yAxisTextStyle}
+                yAxisThickness={0}
+                noOfSections={1}
+              />
+            </View>
+          )}
         </View>
         <View className="flex flex-row justify-between items-center py-3 px-5">
           <View className="bg-[#ff7666] rounded-xl">
