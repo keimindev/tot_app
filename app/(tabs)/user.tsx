@@ -82,7 +82,12 @@ const User = () => {
       const haveIt = weeklyRecords.find((item) => item.dayforString === i);
       const transformedNum = (num: number) => {
         const total = (num / 3600 / (goalTime / (4 * 7))).toFixed(1);
-        return Number(total);
+        if(total > (goalTime / (4 * 7)).toFixed(1)){
+          return Number((goalTime / (4 * 7)).toFixed(1))
+        }else{
+          return Number(total);
+        }
+        
       };
       if (haveIt) {
         result.push({
