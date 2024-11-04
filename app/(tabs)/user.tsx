@@ -216,25 +216,24 @@ const User = () => {
                     ? getLastMonth(month)
                     : isToday(new Date())}
                 </Text>
-
+                <View className="flex flex-row justify-start items-center flex-wrap">
                 {lastMonthRecord?.map((item: any) => {
                   return (
                     <View
-                      key={`${item.id}-key`}
-                      className="bg-[#647ce6] rounded-lg h-[80px] w-[80px] flex flex-col justify-center items-center m-3"
+                      key={`key--${item.recordTime}`}
+                      className="bg-[#aab0e6] rounded-lg h-[80px] w-[80px] flex flex-col justify-center items-center m-2 mt-8"
                     >
                       <MaterialIcons
                         name="library-books"
                         size={35}
                         color="black"
                       />
-                      {/* <Text className="text-sm font-Rregular">{capitalize(record.category)}</Text> */}
                       <Text className="text-sm font-Rsemibold">
                         {formatTimeClock(Number(item.recordTime))}
                       </Text>
                     </View>
                   );
-                })}
+                })}</View>
               </View>
             )}
           </View>

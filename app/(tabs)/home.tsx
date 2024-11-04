@@ -183,12 +183,12 @@ const HOME = () => {
           </View>
         </View>
       </View>
-      <View className="bg-[#aab0e6] h-full rounded-t-xl p-8">
+      <View className="bg-[#aab0e6] h-full rounded-t-xl p-5">
         <Text className="text-xl font-Rsemibold">This Month Proggress</Text>
         <Text className="text-right text-lg font-Rbold">
           {formatTimeClock(totalTimeRecord)}
         </Text>
-        <View className="flex flex-row mt-3 items-center justify-center">
+        <View className="flex flex-row mt-8 items-center justify-start flex-wrap">
           {totalRecord.map((record: IRecord) => {
             return <RecordsView record={record} />;
           })}
