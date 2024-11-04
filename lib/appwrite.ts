@@ -416,7 +416,7 @@ export const getWeeklyRecords = async (
               return sum + (Number(record.recordTime) || 0);
             }, 0);
 
-            return { day, dayforString, totalRecordTime };
+            return { date, day, dayforString, totalRecordTime };
           });
       })
     );

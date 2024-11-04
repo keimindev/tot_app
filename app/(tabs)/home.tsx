@@ -93,20 +93,15 @@ const HOME = () => {
     const marked = week
       .filter((day: any) => day.totalRecordTime > 0) // totalRecordTime이 0보다 큰 요소만 필터링
       .map((item: any) => ({
-        date: moment(
-          `${year}-${(month + 1).toString().padStart(2, "0")}-${item.day
-            .toString()
-            .padStart(2, "0")}`
-        ),
+        date: moment(item.date),
         dots: [{ color: "#647ce6", selectedColor: "white" }],
       }));
-
     setMarkedDate(marked);
   };
 
   const handleWeekChange = (startOfWeek : any) => {
     setCurrentWeekStart(startOfWeek.add(6, 'days'));
-    getWeeklyRecords(user.$id, startOfWeek, 7).then((res) => {
+    getWeeklyRecords(user.$id,startOfWeek, 7).then((res) => {
       checkingForMark(res);
     });
   };
