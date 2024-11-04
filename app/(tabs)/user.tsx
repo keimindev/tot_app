@@ -122,7 +122,7 @@ const User = () => {
 
   return (
     <SafeAreaView className="bg-[#647ce6] h-full">
-      <View className="py-3">
+      {isLoading && <View className="py-3">
         <View className="flex flex-row justify-end px-3">
           <Link href="/setting">
             <MaterialIcons name="settings" size={24} color={"white"} />
@@ -141,7 +141,7 @@ const User = () => {
             className="mt-3"
           />
         </View>
-      </View>
+      </View>}
       <View className="bg-[#fff] h-full rounded-t-xl">
         <View className="m-3">
           <Text className="text-center font-Rsemibold text-lg">
@@ -169,7 +169,7 @@ const User = () => {
             </View>
           )}
         </View>
-        <View className="flex flex-row justify-between items-center py-3 px-5">
+        {isLoading &&  <View className="flex flex-row justify-between items-center py-3 px-5">
           <View className="bg-[#ff7666] rounded-xl">
             <Text className="p-3 font-Rsemibold">Goal</Text>
           </View>
@@ -192,8 +192,8 @@ const User = () => {
               {!edit ? "edit" : "save"}
             </Text>
           </TouchableOpacity>
-        </View>
-        <View className="mx-5 mt-7 rounded-lg p-2">
+        </View>}
+        {isLoading && <View className="mx-5 mt-7 rounded-lg p-2">
           <Text className="text-lg font-Rsemibold">
             Last Month Your Records
           </Text>
@@ -237,7 +237,7 @@ const User = () => {
               </View>
             )}
           </View>
-        </View>
+        </View>}
       </View>
     </SafeAreaView>
   );
