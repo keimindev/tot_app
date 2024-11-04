@@ -1,7 +1,13 @@
 import { getLastMonth, isToday } from "@/context/formatDay";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  ActivityIndicator,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
 import {
@@ -82,12 +88,11 @@ const User = () => {
       const haveIt = weeklyRecords.find((item) => item.dayforString === i);
       const transformedNum = (num: number) => {
         const total = (num / 3600 / (goalTime / (4 * 7))).toFixed(1);
-        if(total > (goalTime / (4 * 7)).toFixed(1)){
-          return Number((goalTime / (4 * 7)).toFixed(1))
-        }else{
+        if (total > (goalTime / (4 * 7)).toFixed(1)) {
+          return Number((goalTime / (4 * 7)).toFixed(1));
+        } else {
           return Number(total);
         }
-        
       };
       if (haveIt) {
         result.push({
@@ -122,123 +127,128 @@ const User = () => {
 
   return (
     <SafeAreaView className="bg-[#647ce6] h-full">
-      {isLoading && <View className="py-3">
-        <View className="flex flex-row justify-end px-3">
-          <Link href="/setting">
-            <MaterialIcons name="settings" size={24} color={"white"} />
-          </Link>
-        </View>
-        <Text className="text-[#ffffff] font-Rsemibold text-xl text-center">
-          Current Proggress
-        </Text>
-        <View className="flex flex-row justify-center py-5">
-          <Progress.Circle
-            progress={goalConvertToPercent(totalRecord)}
-            size={130}
-            thickness={8}
-            showsText={true}
-            color={"white"}
-            className="mt-3"
-          />
-        </View>
-      </View>}
-      <View className="bg-[#fff] h-full rounded-t-xl">
-        <View className="m-3">
-          <Text className="text-center font-Rsemibold text-lg">
-            Weekly Track
-          </Text>
-          {isLoading && (
-            <View>
-              <BarChart
-                maxValue={getMaxValue()}
-                data={weeklyRecord}
-                height={120}
-                dashGap={0}
-                disablePress
-                initialSpacing={20}
-                spacing={25}
-                barBorderRadius={2}
-                barWidth={20}
-                frontColor={"#FF7666"}
-                xAxisIndicesColor={"#e4e7f7"}
-                xAxisColor={"#e4e7f7"}
-                yAxisTextStyle={yAxisTextStyle}
-                yAxisThickness={0}
-                noOfSections={1}
+      {isLoading ? (
+        <View>
+          <View className="py-3">
+            <View className="flex flex-row justify-end px-3">
+              <Link href="/setting">
+                <MaterialIcons name="settings" size={24} color={"white"} />
+              </Link>
+            </View>
+            <Text className="text-[#ffffff] font-Rsemibold text-xl text-center">
+              Current Proggress
+            </Text>
+            <View className="flex flex-row justify-center py-5">
+              <Progress.Circle
+                progress={goalConvertToPercent(totalRecord)}
+                size={130}
+                thickness={8}
+                showsText={true}
+                color={"white"}
+                className="mt-3"
               />
             </View>
-          )}
-        </View>
-        {isLoading &&  <View className="flex flex-row justify-between items-center py-3 px-5">
-          <View className="bg-[#ff7666] rounded-xl">
-            <Text className="p-3 font-Rsemibold">Goal</Text>
           </View>
-          {!edit ? (
-            <Text>{goalTime} hours</Text>
-          ) : (
-            <TextInput
-              onChangeText={setGoalTime}
-              value={goalTime}
-              placeholder="Please put only number"
-              keyboardType="numeric"
-            />
-          )}
-          <TouchableOpacity
-            onPress={handlePressBtn}
-            activeOpacity={0.7}
-            className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-[#aab0e6] rounded-2xl"
-          >
-            <Text className="font-Rsemibold text-sm">
-              {!edit ? "edit" : "save"}
-            </Text>
-          </TouchableOpacity>
-        </View>}
-        {isLoading && <View className="mx-5 mt-7 rounded-lg p-2">
-          <Text className="text-lg font-Rsemibold">
-            Last Month Your Records
-          </Text>
-          {lastMonthRecord.length === 0 ? (
-            <View></View>
-          ) : (
-            <Text className="text-right font-Rsemibold text-xl">
-              {formatTimeClock(lastMonthTotalRecord)}
-            </Text>
-          )}
-          <View className="mt-5">
-            {lastMonthRecord.length === 0 ? (
-              <Text className="mt-5 text-lg text-center font-Rmedium text-[#647ce6]">
-                There are no records
+          <View className="bg-[#fff] h-full rounded-t-xl">
+            <View className="m-3">
+              <Text className="text-center font-Rsemibold text-lg">
+                Weekly Track
               </Text>
-            ) : (
               <View>
-                <Text className="font-Rmedium">
-                  {month != undefined
-                    ? getLastMonth(month)
-                    : isToday(new Date())}
-                </Text>
-                <View className="flex flex-row justify-start items-center flex-wrap">
-                {lastMonthRecord?.map((item: any) => {
-                  return (
-                    <View
-                      key={`key--${item.recordTime}`}
-                      className="bg-[#aab0e6] rounded-lg h-[80px] w-[80px] flex flex-col justify-center items-center m-2 mt-8"
-                    >
-                      <MaterialIcons
-                        name="library-books"
-                        size={35}
-                        color="black"
-                      />
-                      <Text className="text-sm font-Rsemibold">
-                        {formatTimeClock(Number(item.recordTime))}
-                      </Text>
-                    </View>
-                  );
-                })}</View>
+                <BarChart
+                  maxValue={getMaxValue()}
+                  data={weeklyRecord}
+                  height={120}
+                  dashGap={0}
+                  disablePress
+                  initialSpacing={20}
+                  spacing={25}
+                  barBorderRadius={2}
+                  barWidth={20}
+                  frontColor={"#FF7666"}
+                  xAxisIndicesColor={"#e4e7f7"}
+                  xAxisColor={"#e4e7f7"}
+                  yAxisTextStyle={yAxisTextStyle}
+                  yAxisThickness={0}
+                  noOfSections={1}
+                />
               </View>
-            )}
+            </View>
+            <View className="flex flex-row justify-between items-center py-3 px-5">
+              <View className="bg-[#ff7666] rounded-xl">
+                <Text className="p-3 font-Rsemibold">Goal</Text>
+              </View>
+              {!edit ? (
+                <Text>{goalTime} hours</Text>
+              ) : (
+                <TextInput
+                  onChangeText={setGoalTime}
+                  value={goalTime}
+                  placeholder="Please put only number"
+                  keyboardType="numeric"
+                />
+              )}
+              <TouchableOpacity
+                onPress={handlePressBtn}
+                activeOpacity={0.7}
+                className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-[#aab0e6] rounded-2xl"
+              >
+                <Text className="font-Rsemibold text-sm">
+                  {!edit ? "edit" : "save"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View className="mx-5 mt-7 rounded-lg p-2">
+              <Text className="text-lg font-Rsemibold">
+                Last Month Your Records
+              </Text>
+              {lastMonthRecord.length === 0 ? (
+                <View></View>
+              ) : (
+                <Text className="text-right font-Rsemibold text-xl">
+                  {formatTimeClock(lastMonthTotalRecord)}
+                </Text>
+              )}
+              <View className="mt-5">
+                {lastMonthRecord.length === 0 ? (
+                  <Text className="mt-5 text-lg text-center font-Rmedium text-[#647ce6]">
+                    There are no records
+                  </Text>
+                ) : (
+                  <View>
+                    <Text className="font-Rmedium">
+                      {month != undefined
+                        ? getLastMonth(month)
+                        : isToday(new Date())}
+                    </Text>
+                    <View className="flex flex-row justify-start items-center flex-wrap">
+                      {lastMonthRecord?.map((item: any) => {
+                        return (
+                          <View
+                            key={`key--${item.recordTime}`}
+                            className="bg-[#aab0e6] rounded-lg h-[80px] w-[80px] flex flex-col justify-center items-center m-2 mt-8"
+                          >
+                            <MaterialIcons
+                              name="library-books"
+                              size={35}
+                              color="black"
+                            />
+                            <Text className="text-sm font-Rsemibold">
+                              {formatTimeClock(Number(item.recordTime))}
+                            </Text>
+                          </View>
+                        );
+                      })}
+                    </View>
+                  </View>
+                )}
+              </View>
+            </View>
           </View>
-        </View>}
-      </View>
+        </View>
+      ) : (
+        <ActivityIndicator color="#ffffff" />
+      )}
     </SafeAreaView>
   );
 };
