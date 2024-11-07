@@ -2,7 +2,7 @@ import CollapsibleView from "@/components/CollapsibleView";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { signOut, updateYourname } from "@/lib/appwrite";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -10,6 +10,10 @@ const Setting = () => {
   const { user,username, setUsername, setUser, setIsLogged } = useGlobalContext();
   const [edit, setEdit] = useState(false);
   const [name, setName]= useState(username)
+
+  useEffect(()=>{
+    setName(username)
+  },[])
 
   const handlePressBtn = () => {
     if (edit) {
