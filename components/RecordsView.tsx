@@ -1,8 +1,6 @@
 import { formatTimeClock } from "@/context/formatTime";
 import { View, Text } from "react-native";
 import Icon from "@/assets/icon";
-import { categoryList } from "@/context/category";
-import { useEffect } from "react";
 
 
 export interface IRecord {

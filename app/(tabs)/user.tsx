@@ -63,7 +63,7 @@ const User = () => {
     });
   }, []);
 
-  const goalConvertToPercent = (time: number) => {
+  const goalConvertToPercent = (time: any) => {
     const res = time / (goalTime * 60 * 60);
     return Number(res.toFixed(2));
   };

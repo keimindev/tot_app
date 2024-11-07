@@ -3,11 +3,11 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { signOut, updateYourname } from "@/lib/appwrite";
 import { router } from "expo-router";
 import { useState } from "react";
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Setting = () => {
-  const { user,username, setUsername } = useGlobalContext();
+  const { user,username, setUsername, setUser, setIsLogged } = useGlobalContext();
   const [edit, setEdit] = useState(false);
   const [name, setName]= useState(username)
 
@@ -20,6 +20,14 @@ const Setting = () => {
     setEdit(!edit);
   };
 
+  const logout = async() => {
+    await signOut();
+    setUser(null);
+    setIsLogged(false);
+    Alert.alert("Success", "User logged out successfully");
+    
+    router.replace("/sign-in");
+  }
   return (
     <SafeAreaView className="bg-[#fff] h-full">
       <View className="m-3">
@@ -65,10 +73,7 @@ const Setting = () => {
         </View>
         <View className="mt-5">
           <TouchableOpacity
-            onPress={() => {
-              signOut();
-              router.push("/sign-in");
-            }}
+            onPress={logout}
             activeOpacity={0.7}
             className=""
           >

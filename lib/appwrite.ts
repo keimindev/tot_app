@@ -117,6 +117,7 @@ export async function signOut() {
 
     return session;
   } catch (error: any) {
+    console.log(error)
     throw new Error(error);
   }
 }

@@ -19,12 +19,12 @@ const RootLayout = () => {
   });
 
   useEffect(() => {
-    if (error) throw error;
+    // if (error) throw error;
 
     if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, error]);
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;

@@ -24,8 +24,8 @@ const HOME = () => {
   const [todayTotalRecord, setTodayTotalRecord] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState(moment());
   const [markedDate, setMarkedDate] = useState([]);
-  const [currentMonth, setCurrentMonth] = useState(moment().format('MM'));
-  const [currentYear, setCurrentYear] = useState(moment().format('YYYY')); // 초기 연도 설정
+  const [currentMonth, setCurrentMonth] = useState(moment().format("MM"));
+  const [currentYear, setCurrentYear] = useState(moment().format("YYYY")); // 초기 연도 설정
   const [currentWeekStart, setCurrentWeekStart] = useState(moment());
 
   const month = new Date().getMonth();
@@ -59,8 +59,8 @@ const HOME = () => {
       }
     );
 
-    setCurrentMonth(selected.format('MM')); // 주 시작 날짜 기준으로 월 업데이트
-    setCurrentYear(selected.format('YYYY'))
+    setCurrentMonth(selected.format("MM")); // 주 시작 날짜 기준으로 월 업데이트
+    setCurrentYear(selected.format("YYYY"));
   };
 
   useEffect(() => {
@@ -82,7 +82,6 @@ const HOME = () => {
     getWeeklyRecords(user.$id, selectedDate, dayToFetch).then((res) => {
       checkingForMark(res);
     });
-
   }, []);
 
   const capitalize = (ch: string) => {
@@ -99,9 +98,9 @@ const HOME = () => {
     setMarkedDate(marked);
   };
 
-  const handleWeekChange = (startOfWeek : any) => {
-    setCurrentWeekStart(startOfWeek.add(6, 'days'));
-    getWeeklyRecords(user.$id,startOfWeek, 7).then((res) => {
+  const handleWeekChange = (startOfWeek: any) => {
+    setCurrentWeekStart(startOfWeek.add(6, "days"));
+    getWeeklyRecords(user.$id, startOfWeek, 7).then((res) => {
       checkingForMark(res);
     });
   };
@@ -111,12 +110,16 @@ const HOME = () => {
       <View className="flex flex-row mx-5 mt-8 justify-between items-center">
         <View>
           <Text className="text-sm font-Rsemibold">Hello</Text>
-          <Text className="text-lg text-text-highlight font-Rsemibold">
-            {user.username}
-          </Text>
+          {user && (
+            <Text className="text-lg text-text-highlight font-Rsemibold">
+              {user.username}
+            </Text>
+          )}
         </View>
         <View>
-          <Text className="text-2xl font-Rsemibold">{findYearMonth(currentYear,currentMonth)}</Text>
+          <Text className="text-2xl font-Rsemibold">
+            {findYearMonth(currentYear, currentMonth)}
+          </Text>
         </View>
       </View>
       <View className="h-[100px]">

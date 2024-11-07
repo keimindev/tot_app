@@ -30,8 +30,6 @@ const SignIn = () => {
 
       Alert.alert("Success", "User signed in successfully");
       router.replace("/home");
-
-      router.replace("/home");
     } catch (error : any) {
       Alert.alert("Error", error.message);
     } finally {
