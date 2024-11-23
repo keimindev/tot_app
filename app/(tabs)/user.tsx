@@ -135,7 +135,7 @@ const User = () => {
                 <MaterialIcons name="settings" size={24} color={"white"} />
               </Link>
             </View>
-            <Text className="text-[#ffffff] font-Rsemibold text-xl text-center">
+            <Text className="text-[#ffffff] font-Rsemibold text-lg text-center">
               Current Proggress
             </Text>
             <View className="flex flex-row justify-center py-5">
@@ -151,7 +151,7 @@ const User = () => {
           </View>
           <View className="bg-[#fff] h-full rounded-t-xl">
             <View className="m-3">
-              <Text className="text-center font-Rsemibold text-lg">
+              <Text className="text-center font-Rsemibold">
                 Weekly Track
               </Text>
               <View>
@@ -199,13 +199,13 @@ const User = () => {
               </TouchableOpacity>
             </View>
             <View className="mx-5 mt-7 rounded-lg p-2">
-              <Text className="text-lg font-Rsemibold">
+              <Text className="text-base font-Rsemibold">
                 Last Month Your Records
               </Text>
               {lastMonthRecord.length === 0 ? (
                 <View></View>
               ) : (
-                <Text className="text-right font-Rsemibold text-xl">
+                <Text className="text-right font-Rsemibold text-lg">
                   {formatTimeClock(lastMonthTotalRecord)}
                 </Text>
               )}
@@ -226,7 +226,7 @@ const User = () => {
                         return (
                           <View
                             key={`key--${item.recordTime}`}
-                            className="bg-[#aab0e6] rounded-lg h-[80px] w-[80px] flex flex-col justify-center items-center m-2 mt-8"
+                            className="bg-[#aab0e6] rounded-lg h-[70px] w-[70px] flex flex-col justify-center items-center m-2 mt-8"
                           >
                             <MaterialIcons
                               name="library-books"

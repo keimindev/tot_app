@@ -187,11 +187,11 @@ const HOME = () => {
         </View>
       </View>
       <View className="bg-[#aab0e6] h-full rounded-t-xl p-5">
-        <Text className="text-xl font-Rsemibold">This Month Proggress</Text>
+        <Text className="text-lg font-Rsemibold">This Month Proggress</Text>
         <Text className="text-right text-lg font-Rbold">
           {formatTimeClock(totalTimeRecord)}
         </Text>
-        <View className="flex flex-row mt-8 items-center justify-start flex-wrap">
+        <View className="flex flex-row mt-5 items-center justify-start flex-wrap">
           {totalRecord.map((record: IRecord) => {
             return <RecordsView record={record} />;
           })}

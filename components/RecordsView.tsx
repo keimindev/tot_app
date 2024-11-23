@@ -17,7 +17,7 @@ const RecordsView: React.FC<RecordsViewProps> = ({ record }) => {
   return (
     <View
       key={`key--${record.recordTime}`}
-      className="bg-[#fff] rounded-lg h-[80px] w-[80px] flex flex-col justify-center items-center m-2"
+      className="bg-[#fff] rounded-lg h-[70px] w-[70px] flex flex-col justify-center items-center m-2"
     >
       <Icon name={`${record.category}Icon` as any} width={40} height={40} />
       <Text className="text-sm font-Rsemibold">
