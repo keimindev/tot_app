@@ -139,7 +139,7 @@ const User = () => {
             <Text className="text-[#ffffff] font-Rsemibold text-lg text-center">
               Current Proggress
             </Text>
-            <View className="flex flex-row justify-center py-5">
+            <View className="flex flex-row justify-center py-2">
               <Progress.Circle
                 progress={goalConvertToPercent(totalRecord)}
                 size={130}
@@ -150,7 +150,7 @@ const User = () => {
               />
             </View>
           </View>
-          <View className="bg-[#fff] h-full rounded-t-xl">
+          <View className="bg-[#fff] h-full rounded-t-xl mt-1">
             <View className="m-3">
               <Text className="text-center font-Rsemibold">Weekly Track</Text>
               <View>
