@@ -39,7 +39,7 @@ const Setting = () => {
           <CollapsibleView title="Set Your Profile" color="white">
             <View className="flex flex-row justify-between mt-3 px-5 rounded-xl">
               {!edit? (
-                <Text className="text-lg font-Rsemibold mt-2">{name}</Text>
+                <Text className="text-lg font-Rsemibold mt-2">{username}</Text>
               ) : (
                 <TextInput
                   onChangeText={setName}
@@ -50,19 +50,29 @@ const Setting = () => {
                   maxLength={20}
                 />
               )}
+              {!edit ?
               <TouchableOpacity
                 onPress={handlePressBtn}
                 activeOpacity={0.7}
                 className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-[#aab0e6] rounded-2xl"
               >
                 <Text className="font-Rsemibold text-sm">
-                  {!edit ? "edit" : "save"}
+                 edit
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> : 
+               <TouchableOpacity
+               onPress={handlePressBtn}
+               activeOpacity={0.7}
+               className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-[#FF6777] rounded-2xl"
+             >
+               <Text className="font-Rsemibold text-sm text-white">
+                save
+               </Text>
+             </TouchableOpacity> }
             </View>
           </CollapsibleView>
         </View>
-        <View className="mb-2">
+        {/* <View className="mb-2">
           <CollapsibleView title="About App" color="white">
             <View className="mt-3 px-5">
               <Text className="font-Rregular">
@@ -70,10 +80,10 @@ const Setting = () => {
               </Text>
             </View>
           </CollapsibleView>
-        </View>
+        </View> */}
         <View className="border border-[#647ce6]"></View>
         <View className="mt-5">
-          <Text className="font-Rsemibold">Version 1.0</Text>
+          <Text className="font-Rsemibold">Version 1.0.0</Text>
         </View>
         <View className="mt-5">
           <TouchableOpacity

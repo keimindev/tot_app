@@ -107,7 +107,7 @@ const HOME = () => {
 
   return (
     <SafeAreaView className="bg-[#fff] h-full">
-      <View className="flex flex-row mx-5 mt-8 justify-between items-center">
+      <View className="flex flex-row mx-5 mt-3 justify-between items-center">
         <View>
           <Text className="text-sm font-Rsemibold">Hello</Text>
           {user && (

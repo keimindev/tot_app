@@ -129,7 +129,7 @@ const User = () => {
     <SafeAreaView className="bg-[#647ce6] h-full">
       {isLoading ? (
         <View>
-          <View className="py-3">
+          <View className="py-1">
             <View className="flex flex-row justify-end px-3">
               <Link href="/setting">
                 <MaterialIcons name="settings" size={24} color={"white"} />
@@ -209,7 +209,7 @@ const User = () => {
                   {formatTimeClock(lastMonthTotalRecord)}
                 </Text>
               )}
-              <View className="mt-5">
+              <View className="mt-1">
                 {lastMonthRecord.length === 0 ? (
                   <Text className="mt-5 text-lg text-center font-Rmedium text-[#647ce6]">
                     There are no records
