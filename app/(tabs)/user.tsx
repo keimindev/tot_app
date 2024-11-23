@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
@@ -151,9 +152,7 @@ const User = () => {
           </View>
           <View className="bg-[#fff] h-full rounded-t-xl">
             <View className="m-3">
-              <Text className="text-center font-Rsemibold">
-                Weekly Track
-              </Text>
+              <Text className="text-center font-Rsemibold">Weekly Track</Text>
               <View>
                 <BarChart
                   maxValue={getMaxValue()}
@@ -198,7 +197,7 @@ const User = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View className="mx-5 mt-7 rounded-lg p-2">
+            <View className="mx-5 mt-4 rounded-lg p-2">
               <Text className="text-base font-Rsemibold">
                 Last Month Your Records
               </Text>
@@ -216,12 +215,16 @@ const User = () => {
                   </Text>
                 ) : (
                   <View>
-                    <Text className="font-Rmedium">
+                    <Text className="font-Rmedium text-lg">
                       {month != undefined
                         ? getLastMonth(month)
                         : isToday(new Date())}
                     </Text>
-                    <View className="flex flex-row justify-start items-center flex-wrap">
+                    <ScrollView
+                      horizontal
+                      contentContainerStyle={{ paddingHorizontal: 10 }}
+                      className="flex flex-row"
+                    >
                       {lastMonthRecord?.map((item: any) => {
                         return (
                           <View
@@ -239,7 +242,7 @@ const User = () => {
                           </View>
                         );
                       })}
-                    </View>
+                    </ScrollView>
                   </View>
                 )}
               </View>

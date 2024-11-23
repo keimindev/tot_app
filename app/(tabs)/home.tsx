@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -191,11 +191,15 @@ const HOME = () => {
         <Text className="text-right text-lg font-Rbold">
           {formatTimeClock(totalTimeRecord)}
         </Text>
-        <View className="flex flex-row mt-5 items-center justify-start flex-wrap">
+        <ScrollView
+        horizontal 
+        contentContainerStyle={{ paddingHorizontal: 0 }}
+        className="flex flex-row mt-5"
+        >
           {totalRecord.map((record: IRecord) => {
             return <RecordsView record={record} />;
           })}
-        </View>
+      </ScrollView>
       </View>
     </SafeAreaView>
   );
