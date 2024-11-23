@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useKeepAwake } from 'expo-keep-awake';
 
 const Stopwatch = () => {
   const [timer, setTimer] = useState("stopwatch");
@@ -18,6 +19,7 @@ const Stopwatch = () => {
   const startTimeRef = useRef<number>(0);
 
   useEffect(() => {
+    useKeepAwake();
     setTime(0);
     setRunning(false);
   }, []);
