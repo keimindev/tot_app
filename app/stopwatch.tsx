@@ -9,6 +9,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useKeepAwake } from 'expo-keep-awake';
 
 const Stopwatch = () => {
+  useKeepAwake();
   const [timer, setTimer] = useState("stopwatch");
   const { user, section } = useGlobalContext();
 
@@ -19,7 +20,6 @@ const Stopwatch = () => {
   const startTimeRef = useRef<number>(0);
 
   useEffect(() => {
-    useKeepAwake();
     setTime(0);
     setRunning(false);
   }, []);
