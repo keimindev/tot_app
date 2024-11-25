@@ -37,7 +37,7 @@ const Setting = () => {
       <View className="m-3">
         <View className="mb-2">
           <CollapsibleView title="Set Your Profile" color="white">
-            <View className="flex flex-row justify-between mt-3 px-5 rounded-xl">
+            <View className="flex flex-row justify-between mt-3 px-3 rounded-xl">
               {!edit? (
                 <Text className="text-lg font-Rsemibold mt-2">{username}</Text>
               ) : (
