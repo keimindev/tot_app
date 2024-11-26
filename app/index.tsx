@@ -15,7 +15,7 @@ const Welcome = () => {
       <ScrollView contentContainerStyle={{ height: "100%" }}>
         <View className="w-full h-full px-4 items-center justify-center">
           <Text className="text-lg text-white font-Rmedium">
-            Trace of You Time
+            Trace of Your Time
           </Text>
           <Text className="text-6xl text-white font-Rbold">T.o.T</Text>
           <StatusBar style="auto" />

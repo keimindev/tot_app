@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "tot",
+    "name": "ToT",
     "slug": "tot",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "tot",
+    "scheme": "ToT",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#41475D"
     },
     "ios": {
       "supportsTablet": false,
