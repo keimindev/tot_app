@@ -1,6 +1,6 @@
 import { getLastMonth, isToday } from "@/context/formatDay";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -64,10 +64,13 @@ const User = () => {
     });
   }, []);
 
-  const goalConvertToPercent = (time: any) => {
-    const res = time / (goalTime * 60 * 60);
-    return Number(res.toFixed(2));
-  };
+  const goalConvertToPercent = useCallback(
+    (time: any) => {
+      const res = time / (goalTime * 60 * 60);
+      return Number(res.toFixed(2));
+    },
+    [goalTime]
+  );
 
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 

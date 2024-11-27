@@ -1,44 +1,68 @@
 import CollapsibleView from "@/components/CollapsibleView";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { signOut, updateYourname } from "@/lib/appwrite";
+import { deleteAccount, signOut, updateYourname } from "@/lib/appwrite";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Setting = () => {
-  const { user,username, setUsername, setUser, setIsLogged } = useGlobalContext();
+  const { user, username, setUsername, setUser, setIsLogged } =
+    useGlobalContext();
   const [edit, setEdit] = useState(false);
-  const [name, setName]= useState(username)
+  const [name, setName] = useState(username);
 
-  useEffect(()=>{
-    setName(username)
-  },[])
+  useEffect(() => {
+    setName(username);
+  }, []);
 
   const handlePressBtn = () => {
     if (edit) {
       updateYourname(user.$id, name);
-      setUsername(name)
-      
+      setUsername(name);
     }
     setEdit(!edit);
   };
 
-  const logout = async() => {
+  const logout = async () => {
     await signOut();
     setUser(null);
     setIsLogged(false);
     Alert.alert("Success", "User logged out successfully");
-    
+
     router.replace("/sign-in");
-  }
+  };
+
+  const removeAccount = async () => {
+    Alert.alert(
+      "Are you sure to delete Account?",
+      "",
+      [
+        {
+          text: "No", // 버튼 제목
+          onPress: () => console.log("No"), //onPress 이벤트시 콘솔창에 로그를 찍는다
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            await deleteAccount(user.$id);
+            Alert.alert("Success", `User successfully deleted.`);
+          },
+        }, //버튼 제목
+        // 이벤트 발생시 로그를 찍는다
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <SafeAreaView className="bg-[#fff] h-full">
       <View className="m-3">
         <View className="mb-2">
           <CollapsibleView title="Set Your Profile" color="white">
             <View className="flex flex-row justify-between mt-3 px-3 rounded-xl">
-              {!edit? (
+              {!edit ? (
                 <Text className="text-lg font-Rsemibold mt-2">{username}</Text>
               ) : (
                 <TextInput
@@ -50,47 +74,45 @@ const Setting = () => {
                   maxLength={20}
                 />
               )}
-              {!edit ?
+              {!edit ? (
+                <TouchableOpacity
+                  onPress={handlePressBtn}
+                  activeOpacity={0.7}
+                  className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-[#aab0e6] rounded-2xl"
+                >
+                  <Text className="font-Rsemibold text-sm">edit</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={handlePressBtn}
+                  activeOpacity={0.7}
+                  className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-[#FF6777] rounded-2xl"
+                >
+                  <Text className="font-Rsemibold text-sm text-white">
+                    save
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <View className="mt-8 px-3">
               <TouchableOpacity
-                onPress={handlePressBtn}
+                onPress={removeAccount}
                 activeOpacity={0.7}
-                className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-[#aab0e6] rounded-2xl"
+                className="min-h-[40px"
               >
-                <Text className="font-Rsemibold text-sm">
-                 edit
-                </Text>
-              </TouchableOpacity> : 
-               <TouchableOpacity
-               onPress={handlePressBtn}
-               activeOpacity={0.7}
-               className="min-h-[40px] w-[60px] flex flex-row justify-center items-center bg-[#FF6777] rounded-2xl"
-             >
-               <Text className="font-Rsemibold text-sm text-white">
-                save
-               </Text>
-             </TouchableOpacity> }
+                <Text className="font-Rsemibold text-sm">Delete Account</Text>
+              </TouchableOpacity>
             </View>
           </CollapsibleView>
         </View>
-        {/* <View className="mb-2">
-          <CollapsibleView title="About App" color="white">
-            <View className="mt-3 px-5">
-              <Text className="font-Rregular">
-                This appp is....
-              </Text>
-            </View>
-          </CollapsibleView>
-        </View> */}
-        <View className="border border-[#647ce6]"></View>
-        <View className="mt-5">
+      </View>
+      <View>
+        <View className="border border-[#647ce6] mt-5"></View>
+        <View className="mt-5 px-4">
           <Text className="font-Rsemibold">Version 1.0.0</Text>
         </View>
-        <View className="mt-5">
-          <TouchableOpacity
-            onPress={logout}
-            activeOpacity={0.7}
-            className=""
-          >
+        <View className="mt-5 px-4">
+          <TouchableOpacity onPress={logout} activeOpacity={0.7} className="">
             <Text className="text-[#ff7666] font-Rsemibold">Logout</Text>
           </TouchableOpacity>
         </View>

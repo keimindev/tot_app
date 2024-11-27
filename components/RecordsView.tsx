@@ -16,7 +16,7 @@ interface RecordsViewProps {
 const RecordsView: React.FC<RecordsViewProps> = ({ record }) => {
   return (
     <View
-      key={`key--${record.recordTime}`}
+      key={`key--${record.id}`}
       className="bg-[#fff] rounded-lg h-[70px] w-[70px] flex flex-col justify-center items-center m-2"
     >
       <Icon name={`${record.category}Icon` as any} width={40} height={40} />
