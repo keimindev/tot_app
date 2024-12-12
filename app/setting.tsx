@@ -1,6 +1,6 @@
 import CollapsibleView from "@/components/CollapsibleView";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { deleteAccount, signOut, updateYourname } from "@/lib/appwrite";
+import { signOut, updateYourname } from "@/lib/appwrite";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
@@ -46,7 +46,6 @@ const Setting = () => {
         {
           text: "Yes",
           onPress: async () => {
-            await deleteAccount(user.$id);
             Alert.alert("Success", `User successfully deleted.`);
           },
         }, //버튼 제목

@@ -68,16 +68,6 @@ export const createUser = async (
   }
 };
 
-export const deleteAccount = async (userId : string) => {
-  try {
-    await account.delete(); // 현재 로그인된 계정을 삭제
-    console.log("Account deleted successfully");
-  } catch (error: any) {
-    console.error("Error deleting account:", error.message);
-    throw new Error(error.message || "Failed to delete account");
-  }
-}
-
 export async function signIn(email: string, password: string) {
   try {
     const session = await account.createEmailPasswordSession(email, password);

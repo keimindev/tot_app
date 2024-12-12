@@ -21,6 +21,8 @@ import { formatTimeClock } from "@/context/formatTime";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { BarChart } from "react-native-gifted-charts";
 import { Link } from "expo-router";
+import { categoryList } from "@/context/category";
+import Icon from "@/assets/icon";
 
 const User = () => {
   const { user, goalTime, setGoalTime } = useGlobalContext();
@@ -47,6 +49,7 @@ const User = () => {
 
   useEffect(() => {
     getUserRecords(user.$id, year, month).then((res) => {
+      console.log(res, 'res')
       setLastMonthRecord(res);
     });
 
@@ -128,6 +131,11 @@ const User = () => {
     const str = (goalTime / (4 * 7)).toFixed(1);
     return Number(str);
   };
+
+  const findIcon = (items : any) => {
+   const id = categoryList.find((cate) => cate.category === items.category )
+   return id?.iconId
+  }
 
   return (
     <SafeAreaView className="bg-[#647ce6] h-full">
@@ -228,15 +236,15 @@ const User = () => {
                       contentContainerStyle={{ paddingHorizontal: 10 }}
                       className="flex flex-row"
                     >
-                      {lastMonthRecord?.map((item: any) => {
-                        return (
+                      {lastMonthRecord && lastMonthRecord?.map((item: any) => {
+                       return (
                           <View
                             key={`key--${item.recordTime}`}
                             className="bg-[#aab0e6] rounded-lg h-[70px] w-[70px] flex flex-col justify-center items-center m-2 mt-8"
                           >
-                            <MaterialIcons
-                              name="library-books"
-                              size={35}
+                            <Icon
+                               name={findIcon(item) as any}
+                               width={35} height={35}
                               color="black"
                             />
                             <Text className="text-sm font-Rsemibold">
