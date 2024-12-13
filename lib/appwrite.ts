@@ -117,10 +117,46 @@ export async function signOut() {
 
     return session;
   } catch (error: any) {
-    console.log(error)
+    console.log(error);
     throw new Error(error);
   }
 }
+
+// delete user
+export const deleteUserAndResources = async (id : string) => {
+  const currentAccount = await account.get();
+  try {
+    // Step 1: 사용자와 연결된 문서 삭제
+    const documents = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.recordCollectionId,
+      [Query.equal("users", id)]);
+
+    for (const document of documents.documents) {
+      await databases.deleteDocument(  
+        appwriteConfig.databaseId,
+        appwriteConfig.recordCollectionId, 
+        document.$id);
+    }
+
+    const UserDocuments = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      [Query.equal("accountId", currentAccount.$id)])
+
+    for (const document of UserDocuments.documents) {
+      await databases.deleteDocument(  
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId, 
+        document.$id);
+    }
+
+    await signOut()
+
+  } catch (error) {
+    console.error("Error deleting user and resources:", error);
+  }
+};
 
 // Save record
 export async function saveRecords(category: string, id: string, time: number) {
@@ -142,43 +178,46 @@ export async function saveRecords(category: string, id: string, time: number) {
   }
 }
 
-export const saveGoalTime = async ( documentId: string, time : number) => {
-  try{
+export const saveGoalTime = async (documentId: string, time: number) => {
+  try {
     const res = await databases.updateDocument(
       appwriteConfig.databaseId,
       appwriteConfig.userCollectionId,
       documentId,
       {
-        goalTime: time
+        goalTime: time,
       }
     );
 
-    return res
-  }catch(error: any){
-    console.log(error)
+    return res;
+  } catch (error: any) {
+    console.log(error);
   }
-}
+};
 
-export const updateYourname = async ( documentId: string, name : string) => {
-  try{
+export const updateYourname = async (documentId: string, name: string) => {
+  try {
     const res = await databases.updateDocument(
       appwriteConfig.databaseId,
       appwriteConfig.userCollectionId,
       documentId,
       {
-        username: name
+        username: name,
       }
     );
 
-    return res
-  }catch(error: any){
-    console.log(error)
+    return res;
+  } catch (error: any) {
+    console.log(error);
   }
-}
+};
 
 // Get records
-export const getUserRecords = async (id: string, year: number,
-  month: number) => {
+export const getUserRecords = async (
+  id: string,
+  year: number,
+  month: number
+) => {
   try {
     const currentAccount = await account.get();
     if (!currentAccount) throw Error;
@@ -192,7 +231,7 @@ export const getUserRecords = async (id: string, year: number,
       [
         Query.equal("users", id),
         Query.greaterThanEqual("$createdAt", startDate),
-        Query.lessThanEqual("$createdAt", endDate)
+        Query.lessThanEqual("$createdAt", endDate),
       ]
     );
 
@@ -249,7 +288,7 @@ export const getMonthlyRecords = async (
       [
         Query.equal("users", id),
         Query.greaterThanEqual("$createdAt", startDate),
-        Query.lessThanEqual("$createdAt", endDate)
+        Query.lessThanEqual("$createdAt", endDate),
       ]
     );
 
@@ -382,15 +421,15 @@ export const getTodayTotalRecords = async (
 
 export const getWeeklyRecords = async (
   id: string,
-  selectedDate : any,
-  daysToFetch: number,
+  selectedDate: any,
+  daysToFetch: number
 ) => {
   try {
     const currentAccount = await account.get();
     if (!currentAccount) throw new Error("Account not found");
 
     const dates = Array.from({ length: daysToFetch }, (_, i) => {
-      const date = new Date(selectedDate)
+      const date = new Date(selectedDate);
       date.setDate(date.getDate() - (daysToFetch - 1 - i)); // 과거부터 오늘까지
       return date;
     });
@@ -399,8 +438,23 @@ export const getWeeklyRecords = async (
       dates.map((date) => {
         const day = date.getDate(); // 일(day) 값
         const dayforString = date.getDay(); // 요일(day) 값
-        const startDate = new Date(date.getFullYear(), date.getMonth(), day, 0, 0, 0).toISOString();
-        const endDate = new Date(date.getFullYear(), date.getMonth(), day, 23, 59, 59, 999).toISOString();
+        const startDate = new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          day,
+          0,
+          0,
+          0
+        ).toISOString();
+        const endDate = new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          day,
+          23,
+          59,
+          59,
+          999
+        ).toISOString();
 
         return databases
           .listDocuments(
@@ -422,7 +476,7 @@ export const getWeeklyRecords = async (
       })
     );
 
-    return weeklyRecords; 
+    return weeklyRecords;
   } catch (error: any) {
     console.log(error);
     throw new Error(error.message || "Failed to get weekly record time sum");

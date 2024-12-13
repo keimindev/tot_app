@@ -20,7 +20,7 @@ import {
 import { formatTimeClock } from "@/context/formatTime";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { BarChart } from "react-native-gifted-charts";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { categoryList } from "@/context/category";
 import Icon from "@/assets/icon";
 
@@ -49,7 +49,6 @@ const User = () => {
 
   useEffect(() => {
     getUserRecords(user.$id, year, month).then((res) => {
-      console.log(res, 'res')
       setLastMonthRecord(res);
     });
 

@@ -12,7 +12,7 @@ import {
 } from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
 import CalendarStrip from "react-native-calendar-strip";
-import { findYearMonth, isToday } from "@/context/formatDay";
+import { findYearMonth} from "@/context/formatDay";
 import moment from "moment";
 import Icon from "@/assets/icon";
 

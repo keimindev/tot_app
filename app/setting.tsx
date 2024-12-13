@@ -1,6 +1,6 @@
 import CollapsibleView from "@/components/CollapsibleView";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { signOut, updateYourname } from "@/lib/appwrite";
+import { deleteUserAndResources, signOut, updateYourname } from "@/lib/appwrite";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
@@ -35,7 +35,7 @@ const Setting = () => {
 
   const removeAccount = async () => {
     Alert.alert(
-      "Are you sure to delete Account?",
+      "Are you sure to delete Account? All previous records have been deleted and cannot be recovered.",
       "",
       [
         {
@@ -46,7 +46,11 @@ const Setting = () => {
         {
           text: "Yes",
           onPress: async () => {
-            Alert.alert("Success", `User successfully deleted.`);
+            deleteUserAndResources(user.$id)
+            setUser(null);
+            setIsLogged(false);
+            Alert.alert("Success", `It successfully deleted.`);
+            router.replace("/sign-in");
           },
         }, //버튼 제목
         // 이벤트 발생시 로그를 찍는다
@@ -119,5 +123,6 @@ const Setting = () => {
     </SafeAreaView>
   );
 };
+
 
 export default Setting;
