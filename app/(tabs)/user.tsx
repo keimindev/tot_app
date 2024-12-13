@@ -131,10 +131,10 @@ const User = () => {
     return Number(str);
   };
 
-  const findIcon = (items : any) => {
-   const id = categoryList.find((cate) => cate.category === items.category )
-   return id?.iconId
-  }
+  const findIcon = (items: any) => {
+    const id = categoryList.find((cate) => cate.category === items.category);
+    return id?.iconId;
+  };
 
   return (
     <SafeAreaView className="bg-[#647ce6] h-full">
@@ -235,23 +235,25 @@ const User = () => {
                       contentContainerStyle={{ paddingHorizontal: 10 }}
                       className="flex flex-row"
                     >
-                      {lastMonthRecord && lastMonthRecord?.map((item: any) => {
-                       return (
-                          <View
-                            key={`key--${item.recordTime}`}
-                            className="bg-[#aab0e6] rounded-lg h-[70px] w-[70px] flex flex-col justify-center items-center m-2 mt-8"
-                          >
-                            <Icon
-                               name={findIcon(item) as any}
-                               width={35} height={35}
-                              color="black"
-                            />
-                            <Text className="text-sm font-Rsemibold">
-                              {formatTimeClock(Number(item.recordTime))}
-                            </Text>
-                          </View>
-                        );
-                      })}
+                      {lastMonthRecord &&
+                        lastMonthRecord?.map((item: any) => {
+                          return (
+                            <View
+                              key={`key--${item.recordTime}`}
+                              className="bg-[#aab0e6] rounded-lg h-[70px] w-[70px] flex flex-col justify-center items-center m-2 mt-8"
+                            >
+                              <Icon
+                                name={findIcon(item) as any}
+                                width={35}
+                                height={35}
+                                color="black"
+                              />
+                              <Text className="text-sm font-Rsemibold">
+                                {formatTimeClock(Number(item.recordTime))}
+                              </Text>
+                            </View>
+                          );
+                        })}
                     </ScrollView>
                   </View>
                 )}
@@ -260,7 +262,9 @@ const User = () => {
           </View>
         </View>
       ) : (
-        <ActivityIndicator color="#ffffff" />
+        <View className="flex-1 justify-center">
+          <ActivityIndicator size="large" color="#ffffff" />
+        </View>
       )}
     </SafeAreaView>
   );

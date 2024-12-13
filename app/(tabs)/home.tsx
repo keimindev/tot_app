@@ -1,4 +1,10 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -28,6 +34,7 @@ const HOME = () => {
   const [currentMonth, setCurrentMonth] = useState(moment().format("MM"));
   const [currentYear, setCurrentYear] = useState(moment().format("YYYY")); // 초기 연도 설정
   const [currentWeekStart, setCurrentWeekStart] = useState(moment());
+  const [isLoading, setIsLoading] = useState(true);
 
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
@@ -69,9 +76,10 @@ const HOME = () => {
       setTotalRecord(res)
     );
 
-    getMonthlyRecords(user.$id, year, month + 1).then((res) =>
-      setTotalTimeRecord(res)
-    );
+    getMonthlyRecords(user.$id, year, month + 1).then((res) => {
+      setIsLoading(false);
+      setTotalTimeRecord(res);
+    });
 
     fetchRecords(user.$id, year, month + 1, today).then(
       ([todayRecordRes, todayTotalRecordRes]) => {
@@ -108,119 +116,136 @@ const HOME = () => {
 
   return (
     <SafeAreaView className="bg-[#fff] h-full">
-      <View className="flex flex-row mx-5 mt-3 justify-between items-center">
-        <View>
-          <Text className="text-sm font-Rsemibold">Hello</Text>
-          {user && (
-            <Text className="text-lg text-text-highlight font-Rsemibold">
-              {user.username}
-            </Text>
-          )}
-        </View>
-        <View>
-          <Text className="text-2xl font-Rsemibold">
-            {findYearMonth(currentYear, currentMonth)}
-          </Text>
-        </View>
-      </View>
-      <View className="h-[100px]">
-        <CalendarStrip
-          showMonth={false}
-          style={{ height: 80, paddingTop: 0, paddingBottom: 0 }}
-          calendarColor={"#ffffff"}
-          calendarHeaderStyle={{ color: "black" }}
-          dateNumberStyle={{ color: "black" }}
-          dateNameStyle={{ color: "black" }}
-          highlightDateContainerStyle={{ backgroundColor: "#647ce6" }}
-          iconContainer={{ flex: 0.1 }}
-          highlightDateNumberStyle={{ color: "white" }}
-          highlightDateNameStyle={{ color: "white" }}
-          selectedDate={selectedDate}
-          onWeekChanged={handleWeekChange}
-          onDateSelected={handleDateSelect}
-          markedDates={markedDate}
-        />
-      </View>
-      <View className="min-h-[200px] m-5 mt-20 mb-10 flex flex-row justify-between">
-        <View className="relative">
-          <Icon
-            name="timerIcon"
-            width={155}
-            height={155}
-            className="absolute top-2"
-          />
-          <View className="absolute top-20 left-5 transform -translate-x-1/2 -translate-y-1/2">
-            <Text className="text-3xl text-[#fff] font-Rbold">
-              {formatTimeClock(todayTotalRecord)}
-            </Text>
-          </View>
-        </View>
-        <View>
-          <View>
-            <Text className="text-xl font-Rsemibold text-right">Today</Text>
-            <Text className="text-xl font-Rsemibold text-right">
-              Your Time Tracker
-            </Text>
-          </View>
-          <View className="bg-rounded-lg p-3 mt-3">
-            {todayRecord?.length === 0 ? (
-              <Text className="text-center text-[#647ce6] font-Rsemibold">
-                There are no records
+      {!isLoading ? (
+        <>
+          <View className="flex flex-row mx-5 mt-3 justify-between items-center">
+            <View>
+              <Text className="text-sm font-Rsemibold">Hello</Text>
+              {user && (
+                <Text className="text-lg text-text-highlight font-Rsemibold">
+                  {user.username}
+                </Text>
+              )}
+            </View>
+            <View>
+              <Text className="text-2xl font-Rsemibold">
+                {findYearMonth(currentYear, currentMonth)}
               </Text>
-            ) : (
-              todayRecord?.map((item: any) => {
-                return (
-                  <View
-                    className="flex flex-row justify-between px-2"
-                    key={`key-${item.category}`}
-                  >
-                    <Text className="text-[#647ce6] font-Rregular">
-                      {capitalize(item.category)}
-                    </Text>
-                    <Text className="text-[#647ce6] font-Rregular">
-                      {formatTimeClock(item.recordTime)}
-                    </Text>
-                  </View>
-                );
-              })
-            )}
+            </View>
           </View>
-        </View>
-      </View>
-      <View className="bg-[#aab0e6] h-full rounded-t-xl p-5">
-      {totalRecord.length > 0 ? (
-           <>
-        <Text className="text-lg font-Rsemibold">This Month Proggress</Text>
-            <Text className="text-right text-lg font-Rbold">
-              {formatTimeClock(totalTimeRecord)}
-            </Text>
-            <ScrollView
-              horizontal
-              contentContainerStyle={{ paddingHorizontal: 0 }}
-              className="flex flex-row mt-5"
-            >
-              {totalRecord.map((record: IRecord) => {
-                return <RecordsView record={record} />;
-              })}
-            </ScrollView>
-          </>
-        ) : (
-          <>
-            <View className="mt-2">
-              <Text className="font-Rregular text-[18px] text-center mb-4">There are no records this month!</Text>
-              <View className="bg-white p-3 rounded-full mt-5 text-center m-2">
-                <TouchableOpacity
-                  onPress={() => { router.push('/section')}}
-                  activeOpacity={0.7}
-                  className="min-h-[40px"
-                >
-                  <Text className="font-Rsemibold text-center text-lg color-[#647ce6]"> Let's record your activity! ⏰ </Text>
-                </TouchableOpacity>
+          <View className="h-[100px]">
+            <CalendarStrip
+              showMonth={false}
+              style={{ height: 80, paddingTop: 0, paddingBottom: 0 }}
+              calendarColor={"#ffffff"}
+              calendarHeaderStyle={{ color: "black" }}
+              dateNumberStyle={{ color: "black" }}
+              dateNameStyle={{ color: "black" }}
+              highlightDateContainerStyle={{ backgroundColor: "#647ce6" }}
+              iconContainer={{ flex: 0.1 }}
+              highlightDateNumberStyle={{ color: "white" }}
+              highlightDateNameStyle={{ color: "white" }}
+              selectedDate={selectedDate}
+              onWeekChanged={handleWeekChange}
+              onDateSelected={handleDateSelect}
+              markedDates={markedDate}
+            />
+          </View>
+          <View className="min-h-[200px] m-5 mt-20 mb-10 flex flex-row justify-between">
+            <View className="relative">
+              <Icon
+                name="timerIcon"
+                width={155}
+                height={155}
+                className="absolute top-2"
+              />
+              <View className="absolute top-20 left-5 transform -translate-x-1/2 -translate-y-1/2">
+                <Text className="text-3xl text-[#fff] font-Rbold">
+                  {formatTimeClock(todayTotalRecord)}
+                </Text>
               </View>
             </View>
-          </>
-        )}
-      </View>
+            <View>
+              <View>
+                <Text className="text-xl font-Rsemibold text-right">Today</Text>
+                <Text className="text-xl font-Rsemibold text-right">
+                  Your Time Tracker
+                </Text>
+              </View>
+              <View className="bg-rounded-lg p-3 mt-3">
+                {todayRecord?.length === 0 ? (
+                  <Text className="text-center text-[#647ce6] font-Rsemibold">
+                    There are no records
+                  </Text>
+                ) : (
+                  todayRecord?.map((item: any) => {
+                    return (
+                      <View
+                        className="flex flex-row justify-between px-2"
+                        key={`key-${item.category}`}
+                      >
+                        <Text className="text-[#647ce6] font-Rregular">
+                          {capitalize(item.category)}
+                        </Text>
+                        <Text className="text-[#647ce6] font-Rregular">
+                          {formatTimeClock(item.recordTime)}
+                        </Text>
+                      </View>
+                    );
+                  })
+                )}
+              </View>
+            </View>
+          </View>
+          <View className="bg-[#aab0e6] h-full rounded-t-xl p-5">
+            {totalRecord.length > 0 ? (
+              <>
+                <Text className="text-lg font-Rsemibold">
+                  This Month Proggress
+                </Text>
+                <Text className="text-right text-lg font-Rbold">
+                  {formatTimeClock(totalTimeRecord)}
+                </Text>
+                <ScrollView
+                  horizontal
+                  contentContainerStyle={{ paddingHorizontal: 0 }}
+                  className="flex flex-row mt-5"
+                >
+                  {totalRecord.map((record: IRecord) => {
+                    return <RecordsView record={record} />;
+                  })}
+                </ScrollView>
+              </>
+            ) : (
+              <>
+                <View className="mt-2">
+                  <Text className="font-Rregular text-[18px] text-center mb-4">
+                    There are no records this month!
+                  </Text>
+                  <View className="bg-white p-3 rounded-full mt-5 text-center m-2">
+                    <TouchableOpacity
+                      onPress={() => {
+                        router.push("/section");
+                      }}
+                      activeOpacity={0.7}
+                      className="min-h-[40px"
+                    >
+                      <Text className="font-Rsemibold text-center text-lg color-[#647ce6]">
+                        {" "}
+                        Let's record your activity! ⏰{" "}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </>
+            )}
+          </View>
+        </>
+      ) : (
+        <View className="flex-1 justify-center">
+          <ActivityIndicator size="large" color="#647ce6" />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
