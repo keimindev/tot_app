@@ -1,6 +1,10 @@
 import CollapsibleView from "@/components/CollapsibleView";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { deleteUserAndResources, signOut, updateYourname } from "@/lib/appwrite";
+import {
+  deleteUserAndResources,
+  signOut,
+  updateYourname,
+} from "@/lib/appwrite";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
@@ -25,18 +29,9 @@ const Setting = () => {
   };
 
   const logout = async () => {
-    await signOut();
-    setUser(null);
-    setIsLogged(false);
-    Alert.alert("Success", "User logged out successfully");
-
-    router.replace("/sign-in");
-  };
-
-  const removeAccount = async () => {
     Alert.alert(
-      "Are you sure to delete Account? All previous records have been deleted and cannot be recovered.",
-      "",
+      "Are you sure to logout?",
+"",
       [
         {
           text: "No", // 버튼 제목
@@ -46,7 +41,35 @@ const Setting = () => {
         {
           text: "Yes",
           onPress: async () => {
-            deleteUserAndResources(user.$id)
+            await signOut();
+            setUser(null);
+            setIsLogged(false);
+            Alert.alert("Success", "User logged out successfully");
+        
+            router.replace("/sign-in");
+          },
+        }, //버튼 제목
+        // 이벤트 발생시 로그를 찍는다
+      ],
+      { cancelable: false }
+    );
+
+  };
+
+  const removeAccount = async () => {
+    Alert.alert(
+      "Are you sure to delete Account?",
+      "All previous records have been deleted and cannot be recovered.",
+      [
+        {
+          text: "No", // 버튼 제목
+          onPress: () => console.log("No"), //onPress 이벤트시 콘솔창에 로그를 찍는다
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            deleteUserAndResources(user.$id);
             setUser(null);
             setIsLogged(false);
             Alert.alert("Success", `It successfully deleted.`);
@@ -63,8 +86,8 @@ const Setting = () => {
     <SafeAreaView className="bg-[#fff] h-full">
       <View className="m-3">
         <View className="mb-2">
-          <CollapsibleView title="Set Your Profile" color="white">
-            <View className="flex flex-row justify-between mt-3 px-3 rounded-xl">
+          <CollapsibleView title="Your Profile" color="white">
+            <View className="flex flex-row justify-between mt-3 px-3 rounded-xl mb-5">
               {!edit ? (
                 <Text className="text-lg font-Rsemibold mt-2">{username}</Text>
               ) : (
@@ -97,7 +120,22 @@ const Setting = () => {
                 </TouchableOpacity>
               )}
             </View>
-            <View className="mt-8 px-3">
+          </CollapsibleView>
+          <View className="mt-5"></View>
+          <CollapsibleView title="Setting" color="white">
+            <View className="mt-5 px-4">
+              <TouchableOpacity
+                onPress={logout}
+                activeOpacity={0.7}
+                className=""
+              >
+                <Text className="text-[#ff7666] font-Rsemibold">Logout</Text>
+              </TouchableOpacity>
+            </View>
+            <View className="mt-5 px-4">
+              <Text className="font-Rsemibold">Version 1.0.0</Text>
+            </View>
+            <View className="mt-5 px-4">
               <TouchableOpacity
                 onPress={removeAccount}
                 activeOpacity={0.7}
@@ -109,20 +147,8 @@ const Setting = () => {
           </CollapsibleView>
         </View>
       </View>
-      <View>
-        <View className="border border-[#647ce6] mt-5"></View>
-        <View className="mt-5 px-4">
-          <Text className="font-Rsemibold">Version 1.0.0</Text>
-        </View>
-        <View className="mt-5 px-4">
-          <TouchableOpacity onPress={logout} activeOpacity={0.7} className="">
-            <Text className="text-[#ff7666] font-Rsemibold">Logout</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
     </SafeAreaView>
   );
 };
-
 
 export default Setting;

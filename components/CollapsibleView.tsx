@@ -22,7 +22,7 @@ const CollapsibleView = ({ title, color, children }: CollapsibleViewProps) => {
 
   const heightInterpolate = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 100], // Adjust 200 to desired max height
+    outputRange: [0, 120], // Adjust 200 to desired max height
   });
 
   return (
