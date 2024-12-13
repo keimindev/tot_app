@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -12,9 +12,10 @@ import {
 } from "@/lib/appwrite";
 import { formatTimeClock } from "@/context/formatTime";
 import CalendarStrip from "react-native-calendar-strip";
-import { findYearMonth} from "@/context/formatDay";
+import { findYearMonth } from "@/context/formatDay";
 import moment from "moment";
 import Icon from "@/assets/icon";
+import { router } from "expo-router";
 
 const HOME = () => {
   const { user } = useGlobalContext();
@@ -187,19 +188,38 @@ const HOME = () => {
         </View>
       </View>
       <View className="bg-[#aab0e6] h-full rounded-t-xl p-5">
+      {totalRecord.length > 0 ? (
+           <>
         <Text className="text-lg font-Rsemibold">This Month Proggress</Text>
-        <Text className="text-right text-lg font-Rbold">
-          {formatTimeClock(totalTimeRecord)}
-        </Text>
-        <ScrollView
-        horizontal 
-        contentContainerStyle={{ paddingHorizontal: 0 }}
-        className="flex flex-row mt-5"
-        >
-          {totalRecord.map((record: IRecord) => {
-            return <RecordsView record={record} />;
-          })}
-      </ScrollView>
+            <Text className="text-right text-lg font-Rbold">
+              {formatTimeClock(totalTimeRecord)}
+            </Text>
+            <ScrollView
+              horizontal
+              contentContainerStyle={{ paddingHorizontal: 0 }}
+              className="flex flex-row mt-5"
+            >
+              {totalRecord.map((record: IRecord) => {
+                return <RecordsView record={record} />;
+              })}
+            </ScrollView>
+          </>
+        ) : (
+          <>
+            <View className="mt-2">
+              <Text className="font-Rregular text-[18px] text-center mb-4">There are no records this month!</Text>
+              <View className="bg-white p-3 rounded-full mt-5 text-center m-2">
+                <TouchableOpacity
+                  onPress={() => { router.push('/section')}}
+                  activeOpacity={0.7}
+                  className="min-h-[40px"
+                >
+                  <Text className="font-Rsemibold text-center text-lg color-[#647ce6]"> Let's record your activity! ⏰ </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </>
+        )}
       </View>
     </SafeAreaView>
   );
