@@ -4,4 +4,5 @@ export const categoryList = [
     { id: 3, iconId: "workoutIcon", category: "workout" },
     { id: 4, iconId: "drawingIcon", category: "drawing" },
     { id: 5, iconId: "gameIcon" ,category: "game" },
+    { id: 6, iconId: "writingIcon" ,category: "writing" }
   ];
