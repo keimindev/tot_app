@@ -1,9 +1,17 @@
-import { formatTimeClock } from "@/context/formatTime";
+import { formatTimeClock, hours, mins } from "@/context/formatTime";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { saveRecords } from "@/lib/appwrite";
 import { Link, router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+  Button,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useKeepAwake } from "expo-keep-awake";
@@ -61,8 +69,17 @@ const Stopwatch = () => {
   };
 
   // function to start timer
-  const startTimer = () => {
+  const startTimer = () => {};
 
+
+  const Button = ( { label }: any ) => {
+    return (
+      <TouchableWithoutFeedback>
+        <View className="items-center justify-center mt-2">
+          <Text className="font-bold text-white text-4xl">{label}</Text>
+        </View>
+      </TouchableWithoutFeedback>
+    );
   };
 
   return (
@@ -89,28 +106,30 @@ const Stopwatch = () => {
           </Text>
         )}
       </View>
-      <View className="mb-20">
+      <View className="mb-20 flex flex-row justify-center items-center">
         {timer === "stopwatch" ? (
           <Text className="text-7xl text-center font-Rbold text-[#fff]">
             {formatTimeClock(time)}
           </Text>
         ) : (
-          <View className="text-7xl text-center font-Rbold text-[#fff]">
-            <TextInput
-              className="text-center"
-              keyboardType="numeric"
-              placeholder="Enter minutes"
-              value={inputMinutes}
-              onChangeText={setInputHours}
-            />
-            <Text>:</Text>
-            <TextInput
-              className="text-center"
-              keyboardType="numeric"
-              placeholder="Enter minutes"
-              value={inputMinutes}
-              onChangeText={setInputMinutes}
-            />
+          <View className="w-[250px] h-[150px] flex flex-row items-center">
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              className=""
+            >
+              {hours.map((item) => (
+                <Button label={item} />
+              ))}
+            </ScrollView>
+            <Text className="text-[#fff] text-5xl">:</Text>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              className=""
+            >
+              {mins.map((item) => (
+                <Button label={item} />
+              ))}
+            </ScrollView>
           </View>
         )}
       </View>
