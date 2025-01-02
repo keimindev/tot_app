@@ -3,10 +3,11 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { saveRecords } from "@/lib/appwrite";
 import { Link, router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useKeepAwake } from 'expo-keep-awake';
+import { useKeepAwake } from "expo-keep-awake";
+import Icon from "@/assets/icon";
 
 const Stopwatch = () => {
   useKeepAwake();
@@ -18,6 +19,9 @@ const Stopwatch = () => {
   const [running, setRunning] = useState<boolean>(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
+
+  const [inputMinutes, setInputMinutes] = useState("00");
+  const [inputHours, setInputHours] = useState("00");
 
   useEffect(() => {
     setTime(0);
@@ -56,17 +60,58 @@ const Stopwatch = () => {
     setRunning(false);
   };
 
+  // function to start timer
+  const startTimer = () => {
+
+  };
+
   return (
     <SafeAreaView className="bg-[#647ce6] h-full justify-center">
-      <View className="mb-10">
+      <View className="mb-20 flex flex-row justify-center items-center">
+        <Icon name={"spinIcon" as any} width={16} height={16} fill={"white"} />
+        {timer === "stopwatch" ? (
+          <Text
+            onPress={() => {
+              setTimer("timer");
+            }}
+            className="text-[#fff] font-Rsemibold text-lg ml-2"
+          >
+            Timer
+          </Text>
+        ) : (
+          <Text
+            onPress={() => {
+              setTimer("stopwatch");
+            }}
+            className="text-[#fff] font-Rsemibold text-lg ml-2"
+          >
+            Stopwatch
+          </Text>
+        )}
+      </View>
+      <View className="mb-20">
         {timer === "stopwatch" ? (
           <Text className="text-7xl text-center font-Rbold text-[#fff]">
             {formatTimeClock(time)}
           </Text>
         ) : (
-          <Text className="text-7xl text-center font-Rbold text-[#fff]">
-            24:00:00
-          </Text>
+          <View className="text-7xl text-center font-Rbold text-[#fff]">
+            <TextInput
+              className="text-center"
+              keyboardType="numeric"
+              placeholder="Enter minutes"
+              value={inputMinutes}
+              onChangeText={setInputHours}
+            />
+            <Text>:</Text>
+            <TextInput
+              className="text-center"
+              keyboardType="numeric"
+              placeholder="Enter minutes"
+              value={inputMinutes}
+              onChangeText={setInputMinutes}
+            />
+          </View>
         )}
       </View>
       <View className="flex flex-row justify-center items-center gap-5 mt-10">
@@ -108,9 +153,9 @@ const Stopwatch = () => {
           </TouchableOpacity>
         )}
         <View className="mt-10">
-        <Link href="/home">
-          <Ionicons name={"home" as any} size={24} color={"#fff"} />
-        </Link>
+          <Link href="/home">
+            <Ionicons name={"home" as any} size={24} color={"#fff"} />
+          </Link>
         </View>
       </View>
     </SafeAreaView>
