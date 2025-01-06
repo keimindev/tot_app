@@ -71,11 +71,11 @@ const Stopwatch = () => {
   const BUTTON_HEIGHT = 50;
 
   // set timer number
-  const getTimerCenter = (offsetY  : any) => {
+  const getTimerCenter = (offsetY: any) => {
     return Math.round(offsetY / BUTTON_HEIGHT) * BUTTON_HEIGHT;
-  }
+  };
 
-  const getCenterPositionFromIndex = (index : number) => {
+  const getCenterPositionFromIndex = (index: number) => {
     return index * BUTTON_HEIGHT;
   };
 
@@ -85,16 +85,14 @@ const Stopwatch = () => {
       values.unshift('');
       values.push('');
     }
-
-    console.log(values, 'va')
     return values;
   };
-  
+
   const refs = useRef(
-    Array.from({ length: 2 }).map(() => createRef<ScrollView>())
+    Array.from({ length: 3 }).map(() => createRef<ScrollView>())
   );
 
-  const getOnScrollStop = (index : number) => (offsetY:any, label:any) => {
+  const getOnScrollStop = (index: number) => (offsetY: any, label: any) => {
     const CENTER_POSITION = getTimerCenter(offsetY);
     const scrollRef = refs.current[index]?.current;
 
@@ -108,14 +106,14 @@ const Stopwatch = () => {
       leading: false,
       trailing: true,
     });
-  
+
     return {
-      showsVerticalScrollIndicator: true,
-      contentContainerStyle: {
-        left: 0,
-        right: 0,
-        position: "absolute",
-      },
+      showsVerticalScrollIndicator: false,
+      // contentContainerStyle: {
+      //   left: 0,
+      //   right: 0,
+      //   position: "absolute",
+      // },
       onScrollBeginDrag: () => {
         onScrollStop.cancel();
       },
@@ -133,13 +131,11 @@ const Stopwatch = () => {
     };
   };
 
-
   const [scrollProps] = useState(() => {
     return Array.from({ length: 2 }).map((_, index) => getScrollProps(index));
   });
 
-  
-  const getOnPress = (scrollViewIdx : number, buttonIdx: number) => () => {
+  const getOnPress = (scrollViewIdx: number, buttonIdx: number) => () => {
     const targetIdx = buttonIdx - 1;
     if (targetIdx < 0) return;
     const CENTER_POSITION = getCenterPositionFromIndex(targetIdx);
@@ -153,12 +149,13 @@ const Stopwatch = () => {
   // function to start timer
   const startTimer = () => {};
 
-
-  const Button = ( { label }: any ) => {
+  const Button = ({ label }: any) => {
     return (
       <TouchableWithoutFeedback>
         <View className="items-center justify-center mt-2">
-          <Text className="font-bold text-white text-4xl">{label}</Text>
+          <Text className="h-[50px] font-bold text-white text-4xl">
+          {label}
+          </Text>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -166,8 +163,9 @@ const Stopwatch = () => {
 
   useEffect(() => {
     console.log("Refs initialized:", refs.current);
+    console.log(hours, mins, 'i');
+    console.log(scrollProps);
   }, []);
-  
 
   return (
     <SafeAreaView className="bg-[#647ce6] h-full justify-center">
@@ -199,22 +197,16 @@ const Stopwatch = () => {
             {formatTimeClock(time)}
           </Text>
         ) : (
-          <View className="w-[250px] h-[150px] flex flex-row items-center border-2 border-white">
-            <ScrollView 
-            {...scrollProps[0]}
-            ref={refs.current[0]}
-            >
-              {fillEmpty(2, hours).map((item : string, index: number) => (
-                <Button label={item} onPress={getOnPress(0,index)}/>
+          <View className="w-[250px] h-[170px] flex flex-row items-center border-2 border-white">
+            <ScrollView {...scrollProps[0]} ref={refs.current[0]}>
+              {hours.map((item: string, index: number) => (
+                <Button label={item} onPress={getOnPress(0, index)} key={index}/>
               ))}
             </ScrollView>
             <Text className="text-[#fff] text-5xl">:</Text>
-            <ScrollView
-            {...scrollProps[1]}
-            ref={refs.current[1]}
-            >
-              {fillEmpty(2, mins).map((item:string, index: number) => (
-                <Button label={item} onPress={getOnPress(1,index)}/>
+            <ScrollView {...scrollProps[1]} ref={refs.current[1]}>
+              {mins.map((item: string, index: number) => (
+                <Button label={item} onPress={getOnPress(1, index)}key={index} />
               ))}
             </ScrollView>
           </View>
