@@ -18,6 +18,7 @@ export const formatTimeClock = (timeInMillis: number) => {
 
 
   export const hours = [
+    "",
     "00",
     "01",
     "02",
@@ -42,8 +43,10 @@ export const formatTimeClock = (timeInMillis: number) => {
     "21",
     "22",
     "23",
+    ""
   ];
   export const mins = [
+    "",
     "00",
     "05",
     "10",
@@ -55,4 +58,5 @@ export const formatTimeClock = (timeInMillis: number) => {
     "45",
     "50",
     "55",
+    ""
   ];

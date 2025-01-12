@@ -2,21 +2,12 @@ import { formatTimeClock, hours, mins } from "@/context/formatTime";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { saveRecords } from "@/lib/appwrite";
 import { Link, router } from "expo-router";
-import { createRef, useEffect, useRef, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  TouchableWithoutFeedback,
-  ScrollViewProps,
-  Animated,
-} from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useKeepAwake } from "expo-keep-awake";
 import Icon from "@/assets/icon";
-import { debounce } from "lodash";
 
 const Stopwatch = () => {
   useKeepAwake();
@@ -69,7 +60,23 @@ const Stopwatch = () => {
     setRunning(false);
   };
 
-  
+  const [selectedHoursIndex, setSelectedHoursIndex] = useState(1); // 중앙 요소의 초기 위치
+  const [selectedMinsIndex, setSelectedMinsIndex] = useState(1); // 중앙 요소의 초기 위치
+
+  const handleScrollHours = (event: any) => {
+    const offsetY = event.nativeEvent.contentOffset.y; // 스크롤 위치
+    const itemHeight = 50; // 각 항목의 높이
+    const index = Math.round(offsetY / itemHeight); // 스크롤에 따라 현재 중앙에 위치한 요소 계산
+    setSelectedHoursIndex(index + 1);
+  };
+
+  const handleScrollMins = (event: any) => {
+    const offsetY = event.nativeEvent.contentOffset.y; 
+    const itemHeight = 50; // 각 항목의 높이
+    const index = Math.round(offsetY / itemHeight); 
+    setSelectedMinsIndex(index + 1);
+  };
+
   return (
     <SafeAreaView className="bg-[#647ce6] h-full justify-center">
       <View className="mb-20 flex flex-row justify-center items-center">
@@ -100,25 +107,54 @@ const Stopwatch = () => {
             {formatTimeClock(time)}
           </Text>
         ) : (
-          <View className="w-[250px] h-[170px] flex flex-row items-center border-2 border-white">
-            <ScrollView>
-              {hours.map((item: string, index: number) => (
-                <View>
-                  <Text>{item}</Text>
+          <View className="w-[200px] h-[160px] flex flex-row justify-center items-center">
+            <ScrollView
+              onScroll={handleScrollHours}
+              scrollEventThrottle={16} // 스크롤 이벤트의 업데이트 빈도
+              snapToInterval={50} // 스냅(스크롤 시 특정 위치 고정) 설정 (요소 높이)
+              decelerationRate="fast" // 스크롤 속도
+              showsVerticalScrollIndicator={false}
+            >
+              {hours.map((item, index) => (
+                <View
+                  key={index}
+                  className="w-[90px] h-[50px] flex items-center justify-center"
+                >
+                  <Text
+                    className={`text-3xl text-white ${
+                      selectedHoursIndex === index ? "font-bold text-4xl" : "font-medium"
+                    }`}
+                  >
+                    {item}
+                  </Text>
                 </View>
               ))}
             </ScrollView>
-            <Text className="text-[#fff] text-5xl">:</Text>
-            <ScrollView>
-            {mins.map((item: string, index: number) => (
-                <View>
-                  <Text>{item}</Text>
+            <Text className="w-[20px] text-[#fff] text-5xl">:</Text>
+            <ScrollView
+              onScroll={handleScrollMins}
+              scrollEventThrottle={16}
+              snapToInterval={50}
+              decelerationRate="fast"
+              showsVerticalScrollIndicator={false}
+            >
+              {mins.map((item: string, index: number) => (
+                <View
+                  key={index}
+                  className="w-[80px] h-[50px] flex items-center justify-center"
+                >
+                  <Text
+                    className={`text-3xl text-white ${
+                      selectedMinsIndex === index ? "font-bold text-4xl" : "font-medium"
+                    }`}
+                  >
+                    {item}
+                  </Text>
                 </View>
               ))}
             </ScrollView>
           </View>
         )}
-   
       </View>
       <View className="flex flex-row justify-center items-center gap-5 mt-10">
         <TouchableOpacity
