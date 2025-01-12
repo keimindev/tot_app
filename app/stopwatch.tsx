@@ -17,15 +17,14 @@ const Stopwatch = () => {
   // State to manage time and stopwatch status
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState<boolean>(false);
+  const [timerRunning, setTimerRunning] = useState<boolean>(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
-
-  const [inputMinutes, setInputMinutes] = useState("00");
-  const [inputHours, setInputHours] = useState("00");
 
   useEffect(() => {
     setTime(0);
     setRunning(false);
+    setTimerRunning(false);
   }, []);
 
   // Function to start the stopwatch
@@ -60,21 +59,36 @@ const Stopwatch = () => {
     setRunning(false);
   };
 
+  // timer setting
   const [selectedHoursIndex, setSelectedHoursIndex] = useState(1); // 중앙 요소의 초기 위치
   const [selectedMinsIndex, setSelectedMinsIndex] = useState(1); // 중앙 요소의 초기 위치
+
+  const [timerHours, setSetHours] = useState("00");
+  const [timerMins, setSetMins] = useState("00");
 
   const handleScrollHours = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y; // 스크롤 위치
     const itemHeight = 50; // 각 항목의 높이
     const index = Math.round(offsetY / itemHeight); // 스크롤에 따라 현재 중앙에 위치한 요소 계산
     setSelectedHoursIndex(index + 1);
+    setSetHours(hours[index + 1]);
   };
 
   const handleScrollMins = (event: any) => {
-    const offsetY = event.nativeEvent.contentOffset.y; 
+    const offsetY = event.nativeEvent.contentOffset.y;
     const itemHeight = 50; // 각 항목의 높이
-    const index = Math.round(offsetY / itemHeight); 
+    const index = Math.round(offsetY / itemHeight);
     setSelectedMinsIndex(index + 1);
+    setSetMins(mins[index + 1]);
+  };
+
+  // Function to start the stopwatch
+  const startTimer = () => {
+    setTimerRunning(true);
+    // startTimeRef.current = Date.now() - time * 1000;
+    // intervalRef.current = setInterval(() => {
+    //   setTime(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    // }, 1000);
   };
 
   return (
@@ -107,7 +121,7 @@ const Stopwatch = () => {
             {formatTimeClock(time)}
           </Text>
         ) : (
-          <View className="w-[200px] h-[160px] flex flex-row justify-center items-center">
+          <View className="w-[200px] h-[160px] flex flex-row justify-center items-center relative">
             <ScrollView
               onScroll={handleScrollHours}
               scrollEventThrottle={16} // 스크롤 이벤트의 업데이트 빈도
@@ -122,7 +136,9 @@ const Stopwatch = () => {
                 >
                   <Text
                     className={`text-3xl text-white ${
-                      selectedHoursIndex === index ? "font-bold text-4xl" : "font-medium"
+                      selectedHoursIndex === index
+                        ? "font-bold text-4xl"
+                        : "font-medium"
                     }`}
                   >
                     {item}
@@ -145,7 +161,9 @@ const Stopwatch = () => {
                 >
                   <Text
                     className={`text-3xl text-white ${
-                      selectedMinsIndex === index ? "font-bold text-4xl" : "font-medium"
+                      selectedMinsIndex === index
+                        ? "font-bold text-4xl"
+                        : "font-medium"
                     }`}
                   >
                     {item}
@@ -155,7 +173,15 @@ const Stopwatch = () => {
             </ScrollView>
           </View>
         )}
+        {timerRunning && (
+          <View className="absolute top-0 left-0 w-[100%] bg-[#647ce6] p-10">
+            <Text className="text-7xl text-white font-bold text-center">
+              {timerHours} : {timerMins}
+            </Text>
+          </View>
+        )}
       </View>
+
       <View className="flex flex-row justify-center items-center gap-5 mt-10">
         <TouchableOpacity
           onPress={resetStopwatch}
@@ -174,7 +200,7 @@ const Stopwatch = () => {
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
-            onPress={startStopwatch}
+            onPress={timer == "timer" ? startTimer : startStopwatch}
             activeOpacity={0.7}
             className="min-h-[40px] px-3 rounded-2xl flex flex-row justify-center items-center bg-[#fff]"
           >
