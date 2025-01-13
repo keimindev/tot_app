@@ -1,50 +1,36 @@
-# Welcome to your Expo app 👋
+# T.o.T (Trace of Time)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+### A time tracking journal started to create a routine. 
 
-## Get started
+T.O.T is a time-tracking application. It serves as a time record book where users can track how much they read and study each day, allowing them to monitor their activities for the month. 
 
-1. Install dependencies
+<img src="https://mingblog.vercel.app/_next/image?url=%2Fstatic%2Fimages%2Fproject%2Ftot-app.png&w=3840&q=75" alt="img" width="500">
 
-   ```bash
-   npm install
-   ```
+I've been striving to create a routine by dedicating 30 minutes of reading every day. However, I found it difficult to track my monthly or weekly reading time using the existing book apps, and there was also inconvenience as I mainly read original books. Therefore, I decided to create my own journal.
 
-2. Start the app
 
-   ```bash
-    npx expo start
-   ```
+### Tech
 
-In the output, you'll find options to open the app in a
+`React-Native(expo)` `Appwrite`
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Features
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- Current
+  - Stopwatch mode
+  - Record time by activity
+  - Daily tracking available
+  - Weekly record review
+  - Monthly goal setting
 
-## Get a fresh project
+- In the future
+  - timer mode
+  - add new activity
 
-When you're ready, run:
+### Hidden story
 
-```bash
-npm run reset-project
-```
+Initially, I quickly built it as a web platform, but later decided to recreate it as an app for more convenient use while on the move. I also wanted to redesign it to make it more accessible to users. While rebuilding it as an app, I added various new designs and features.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-## Learn more
+### Link
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+[App store](https://apps.apple.com/us/app/t-o-t/id6738571196?l=ko)
