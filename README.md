@@ -4,18 +4,19 @@
 
 T.O.T is a time-tracking application. It serves as a time record book where users can track how much they read and study each day, allowing them to monitor their activities for the month. 
 
-<img src="https://mingblog.vercel.app/_next/image?url=%2Fstatic%2Fimages%2Fproject%2Ftot-app.png&w=3840&q=75" alt="img" width="500">
+<img src="https://mingblog.vercel.app/_next/image?url=%2Fstatic%2Fimages%2Fproject%2Ftot-app.png&w=3840&q=75" alt="img" />
 
 I've been striving to create a routine by dedicating 30 minutes of reading every day. However, I found it difficult to track my monthly or weekly reading time using the existing book apps, and there was also inconvenience as I mainly read original books. Therefore, I decided to create my own journal.
 
 
 ### Tech
 
-`React-Native(expo)` `Appwrite`
+`React-Native(expo)` `TypeScript` `Appwrite`
 
 ### Features
 
 - Current
+  - Login/Logout
   - Stopwatch mode
   - Record time by activity
   - Daily tracking available

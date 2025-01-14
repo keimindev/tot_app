@@ -84,12 +84,20 @@ const Stopwatch = () => {
 
   // Function to start the stopwatch
   const startTimer = () => {
-    setTimerRunning(true);
-    // startTimeRef.current = Date.now() - time * 1000;
-    // intervalRef.current = setInterval(() => {
-    //   setTime(Math.floor((Date.now() - startTimeRef.current) / 1000));
-    // }, 1000);
+    if(timerHours == "00" && timerMins == "00"){
+      setTimerRunning(false);
+    }else{
+      setTimerRunning(true);
+    }
   };
+
+  const resetTimer = () => {
+    setTimerRunning(false);
+    setSelectedHoursIndex(1);
+    setSetHours("00");
+    setSelectedMinsIndex(1);
+    setSetMins("00");
+  }
 
   return (
     <SafeAreaView className="bg-[#647ce6] h-full justify-center">
@@ -99,6 +107,7 @@ const Stopwatch = () => {
           <Text
             onPress={() => {
               setTimer("timer");
+              resetStopwatch();
             }}
             className="text-[#fff] font-Rsemibold text-lg ml-2"
           >
@@ -108,6 +117,7 @@ const Stopwatch = () => {
           <Text
             onPress={() => {
               setTimer("stopwatch");
+              resetTimer();
             }}
             className="text-[#fff] font-Rsemibold text-lg ml-2"
           >
@@ -174,7 +184,7 @@ const Stopwatch = () => {
           </View>
         )}
         {timerRunning && (
-          <View className="absolute top-0 left-0 w-[100%] bg-[#647ce6] p-10">
+          <View className="absolute top-0 left-0 w-[100%] bg-[#647ce6] p-12">
             <Text className="text-7xl text-white font-bold text-center">
               {timerHours} : {timerMins}
             </Text>
@@ -184,7 +194,7 @@ const Stopwatch = () => {
 
       <View className="flex flex-row justify-center items-center gap-5 mt-10">
         <TouchableOpacity
-          onPress={resetStopwatch}
+          onPress={timer == "timer" ? resetTimer : resetStopwatch}
           activeOpacity={0.7}
           className="min-h-[40px] px-3 rounded-2xl flex flex-row justify-center items-center bg-[#aab0e6]"
         >
