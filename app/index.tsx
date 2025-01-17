@@ -1,4 +1,3 @@
-import CustomButton from "@/components/CustomButton";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Redirect, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
