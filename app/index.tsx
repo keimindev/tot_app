@@ -1,7 +1,7 @@
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { Redirect, router } from "expo-router";
+import { Redirect, Stack, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView,Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Welcome = () => {
@@ -10,6 +10,7 @@ const Welcome = () => {
   if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
 
   return (
+    <Stack>
     <SafeAreaView className="bg-[#647ce6] h-full">
       <ScrollView contentContainerStyle={{ height: "100%" }}>
         <View className="w-full h-full px-4 items-center justify-center">
@@ -32,6 +33,7 @@ const Welcome = () => {
 
       <StatusBar backgroundColor="#161622" style="light" />
     </SafeAreaView>
+    </Stack>
   );
 };
 
