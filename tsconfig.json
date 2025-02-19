@@ -19,8 +19,6 @@
     "**/*.tsx",
     "app/_layout.tsx",
     "app/index.tsx",
-    "context/GlobalProvider.js",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "context/GlobalProvider.js"
   ]
 }

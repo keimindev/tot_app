@@ -10,7 +10,6 @@ const Welcome = () => {
   if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
 
   return (
-    <Stack>
     <SafeAreaView className="bg-[#647ce6] h-full">
       <ScrollView contentContainerStyle={{ height: "100%" }}>
         <View className="w-full h-full px-4 items-center justify-center">
@@ -33,7 +32,6 @@ const Welcome = () => {
 
       <StatusBar backgroundColor="#161622" style="light" />
     </SafeAreaView>
-    </Stack>
   );
 };
 
