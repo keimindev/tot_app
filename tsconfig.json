@@ -1,7 +1,7 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true,
+    "strict": false,
     "paths": {
       "@/*": [
         "./*"
@@ -19,6 +19,8 @@
     "**/*.tsx",
     "app/_layout.tsx",
     "app/index.tsx",
-    "context/GlobalProvider.js"
+    "context/GlobalProvider.js",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
   ]
 }

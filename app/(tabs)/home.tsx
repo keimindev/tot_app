@@ -212,7 +212,11 @@ const HOME = () => {
                   className="flex flex-row mt-5"
                 >
                   {totalRecord.map((record: IRecord) => {
-                    return <RecordsView record={record} />;
+                    return (
+                      <View key={record.id}>
+                        <RecordsView record={record} />
+                      </View>
+                    );
                   })}
                 </ScrollView>
               </>
