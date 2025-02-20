@@ -60,3 +60,18 @@ export const formatTimeClock = (timeInMillis: number) => {
     "55",
     ""
   ];
+  export const seconds = [
+    "",
+    "00",
+    "05",
+    "10",
+    "15",
+    "20",
+    "25",
+    "30",
+    "40",
+    "45",
+    "50",
+    "55",
+    ""
+  ];

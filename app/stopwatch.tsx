@@ -1,8 +1,8 @@
-import { formatTimeClock, hours, mins } from "@/context/formatTime";
+import { formatTimeClock, hours, mins, seconds } from "@/context/formatTime";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { saveRecords } from "@/lib/appwrite";
 import { Link, router } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -62,16 +62,19 @@ const Stopwatch = () => {
   // timer setting
   const [selectedHoursIndex, setSelectedHoursIndex] = useState(1); // 중앙 요소의 초기 위치
   const [selectedMinsIndex, setSelectedMinsIndex] = useState(1); // 중앙 요소의 초기 위치
+  const [selectedSecsIndex, setSelectedSecsIndex] = useState(1); // 중앙 요소의 초기 위치
 
-  const [timerHours, setSetHours] = useState("00");
-  const [timerMins, setSetMins] = useState("00");
+  const [timerHours, setTimerHours] = useState("00");
+  const [timerMins, setTimerMins] = useState("00");
+  const [timerSec, setTimerSecs] = useState("00");
+  const [timeLeft, setTimeLeft] = useState<number>(0);
 
   const handleScrollHours = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y; // 스크롤 위치
     const itemHeight = 50; // 각 항목의 높이
     const index = Math.round(offsetY / itemHeight); // 스크롤에 따라 현재 중앙에 위치한 요소 계산
     setSelectedHoursIndex(index + 1);
-    setSetHours(hours[index + 1]);
+    setTimerHours(hours[index + 1]);
   };
 
   const handleScrollMins = (event: any) => {
@@ -79,24 +82,58 @@ const Stopwatch = () => {
     const itemHeight = 50; // 각 항목의 높이
     const index = Math.round(offsetY / itemHeight);
     setSelectedMinsIndex(index + 1);
-    setSetMins(mins[index + 1]);
+    setTimerMins(mins[index + 1]);
   };
+
+  const handleScrollSecs = (event: any) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const itemHeight = 50; // 각 항목의 높이
+    const index = Math.round(offsetY / itemHeight);
+    setSelectedSecsIndex(index + 1);
+    setTimerSecs(seconds[index + 1]);
+  };
+
 
   // Function to start the stopwatch
   const startTimer = () => {
     if(timerHours == "00" && timerMins == "00"){
       setTimerRunning(false);
+      timerFormat();
+      runningTimer();
     }else{
       setTimerRunning(true);
     }
   };
 
+  const timerFormat = useCallback(() => {
+    const totalMilliseconds = ((parseInt(timerHours) * 60 + parseInt(timerMins)) * 60 + parseInt(timerSec)) * 1000;
+    setTimeLeft(totalMilliseconds);
+  },[timerHours,timerMins,timerSec])
+
+  const runningTimer = () =>{
+    let timer;
+    if(timerRunning && timeLeft>0){
+      timer = setInterval(() => {
+        setTimeLeft(prevTime => prevTime - 1000); // 매초마다 1000ms씩 감소
+      }, 1000);
+    }else if(timeLeft <= 0){
+      clearInterval(timer);
+    }
+  }
+
+  const converTimerNumber = (timeInMilliseconds : number) => {
+      const hours = Math.floor(timeInMilliseconds / 3600000); 
+      const minutes = Math.floor((timeInMilliseconds % 3600000) / 60000); 
+      const seconds = Math.floor((timeInMilliseconds % 60000) / 1000); 
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  };
+
   const resetTimer = () => {
     setTimerRunning(false);
     setSelectedHoursIndex(1);
-    setSetHours("00");
+    setTimerHours("00");
     setSelectedMinsIndex(1);
-    setSetMins("00");
+    setTimerMins("00");
   }
 
   return (
@@ -142,7 +179,7 @@ const Stopwatch = () => {
               {hours.map((item, index) => (
                 <View
                   key={index}
-                  className="w-[90px] h-[50px] flex items-center justify-center"
+                  className="w-[50px] h-[50px] flex items-center justify-center"
                 >
                   <Text
                     className={`text-3xl text-white ${
@@ -167,11 +204,36 @@ const Stopwatch = () => {
               {mins.map((item: string, index: number) => (
                 <View
                   key={index}
-                  className="w-[80px] h-[50px] flex items-center justify-center"
+                  className="w-[50px] h-[50px] flex items-center justify-center"
                 >
                   <Text
                     className={`text-3xl text-white ${
                       selectedMinsIndex === index
+                        ? "font-bold text-4xl"
+                        : "font-medium"
+                    }`}
+                  >
+                    {item}
+                  </Text>
+                </View>
+              ))}
+            </ScrollView>
+            <Text className="w-[20px] text-[#fff] text-5xl">:</Text>
+            <ScrollView
+              onScroll={handleScrollSecs}
+              scrollEventThrottle={16}
+              snapToInterval={50}
+              decelerationRate="fast"
+              showsVerticalScrollIndicator={false}
+            >
+              {seconds.map((item: string, index: number) => (
+                <View
+                  key={index}
+                  className="w-[50px] h-[50px] flex items-center justify-center"
+                >
+                  <Text
+                    className={`text-3xl text-white ${
+                      selectedSecsIndex === index
                         ? "font-bold text-4xl"
                         : "font-medium"
                     }`}
@@ -188,6 +250,7 @@ const Stopwatch = () => {
             <Text className="text-7xl text-white font-bold text-center">
               {timerHours} : {timerMins}
             </Text>
+            <Text>{converTimerNumber(timeLeft)}</Text>
           </View>
         )}
       </View>
