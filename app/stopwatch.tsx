@@ -2,8 +2,8 @@ import { formatTimeClock, hours, mins, seconds } from "@/context/formatTime";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { saveRecords } from "@/lib/appwrite";
 import { Link, router } from "expo-router";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useKeepAwake } from "expo-keep-awake";
@@ -11,7 +11,7 @@ import Icon from "@/assets/icon";
 
 const Stopwatch = () => {
   useKeepAwake();
-  const [timer, setTimer] = useState("stopwatch");
+  const [type, setType] = useState("stopwatch");
   const { user, section } = useGlobalContext();
 
   // State to manage time and stopwatch status
@@ -94,38 +94,48 @@ const Stopwatch = () => {
   };
 
 
+  const totalMilliseconds =
+  ((parseInt(timerHours) * 60 + parseInt(timerMins)) * 60 +
+    parseInt(timerSec)) *
+  1000;
+
   // Function to start the stopwatch
   const startTimer = () => {
-    if(timerHours == "00" && timerMins == "00"){
+    if (timerHours == "00" && timerMins == "00" && timerSec == "00") {
       setTimerRunning(false);
-      timerFormat();
-      runningTimer();
     }else{
       setTimerRunning(true);
+      setTimeLeft(totalMilliseconds);
     }
   };
 
-  const timerFormat = useCallback(() => {
-    const totalMilliseconds = ((parseInt(timerHours) * 60 + parseInt(timerMins)) * 60 + parseInt(timerSec)) * 1000;
-    setTimeLeft(totalMilliseconds);
-  },[timerHours,timerMins,timerSec])
-
-  const runningTimer = () =>{
-    let timer;
-    if(timerRunning && timeLeft>0){
-      timer = setInterval(() => {
-        setTimeLeft(prevTime => prevTime - 1000); // 매초마다 1000ms씩 감소
-      }, 1000);
-    }else if(timeLeft <= 0){
-      clearInterval(timer);
+  useEffect(() => {
+    if(!timerRunning && timeLeft <= 0 && type === "timer"){
+      finishPopup();
     }
-  }
+  }, [timerRunning]);
 
-  const converTimerNumber = (timeInMilliseconds : number) => {
-      const hours = Math.floor(timeInMilliseconds / 3600000); 
-      const minutes = Math.floor((timeInMilliseconds % 3600000) / 60000); 
-      const seconds = Math.floor((timeInMilliseconds % 60000) / 1000); 
-      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  useEffect(() => {
+    let timer: any;
+    if (timerRunning && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1000); // 매초마다 1000ms씩 감소
+      }, 1000);
+    } else if (timeLeft <= 0 && type === "timer") {
+      clearInterval(timer);
+      setTimerRunning(false)
+    }
+    return () => clearInterval(timer);
+  }, [timerRunning, timeLeft]);
+
+  const converTimerNumber = (timeInMilliseconds: number) => {
+    const hours = Math.floor(timeInMilliseconds / 3600000);
+    const minutes = Math.floor((timeInMilliseconds % 3600000) / 60000);
+    const seconds = Math.floor((timeInMilliseconds % 60000) / 1000);
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0"
+    )}:${String(seconds).padStart(2, "0")}`;
   };
 
   const resetTimer = () => {
@@ -134,16 +144,43 @@ const Stopwatch = () => {
     setTimerHours("00");
     setSelectedMinsIndex(1);
     setTimerMins("00");
-  }
+  };
+
+  const finishPopup = () => {
+    Alert.alert(
+      "🔔 The Timer is up!",
+      "Would you like to save your record?",
+      [
+        {
+          text: "No",
+          onPress: () => {
+            console.log("No")
+          }, 
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            const saveTime = parseInt(timerHours) * 3600 + parseInt(timerMins) * 60 + parseInt(timerSec)
+            await saveRecords(section, user.$id, saveTime)
+            Alert.alert("Success", `It successfully save.`);
+            router.replace("/home");
+          },
+        }, 
+      ],
+      { cancelable: false }
+    );
+  };
+
 
   return (
     <SafeAreaView className="bg-[#647ce6] h-full justify-center">
       <View className="mb-20 flex flex-row justify-center items-center">
         <Icon name={"spinIcon" as any} width={16} height={16} fill={"white"} />
-        {timer === "stopwatch" ? (
+        {type === "stopwatch" ? (
           <Text
             onPress={() => {
-              setTimer("timer");
+              setType("timer");
               resetStopwatch();
             }}
             className="text-[#fff] font-Rsemibold text-lg ml-2"
@@ -153,7 +190,7 @@ const Stopwatch = () => {
         ) : (
           <Text
             onPress={() => {
-              setTimer("stopwatch");
+              setType("stopwatch");
               resetTimer();
             }}
             className="text-[#fff] font-Rsemibold text-lg ml-2"
@@ -163,7 +200,7 @@ const Stopwatch = () => {
         )}
       </View>
       <View className="mb-20 flex flex-row justify-center items-center">
-        {timer === "stopwatch" ? (
+        {type === "stopwatch" ? (
           <Text className="text-7xl text-center font-Rbold text-[#fff]">
             {formatTimeClock(time)}
           </Text>
@@ -247,17 +284,16 @@ const Stopwatch = () => {
         )}
         {timerRunning && (
           <View className="absolute top-0 left-0 w-[100%] bg-[#647ce6] p-12">
-            <Text className="text-7xl text-white font-bold text-center">
-              {timerHours} : {timerMins}
+            <Text className="text-6xl text-white font-bold text-center">
+              {converTimerNumber(timeLeft)}
             </Text>
-            <Text>{converTimerNumber(timeLeft)}</Text>
           </View>
         )}
       </View>
 
       <View className="flex flex-row justify-center items-center gap-5 mt-10">
         <TouchableOpacity
-          onPress={timer == "timer" ? resetTimer : resetStopwatch}
+          onPress={type== "timer" ? resetTimer : resetStopwatch}
           activeOpacity={0.7}
           className="min-h-[40px] px-3 rounded-2xl flex flex-row justify-center items-center bg-[#aab0e6]"
         >
@@ -273,7 +309,7 @@ const Stopwatch = () => {
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
-            onPress={timer == "timer" ? startTimer : startStopwatch}
+            onPress={type === "timer" ? startTimer : startStopwatch}
             activeOpacity={0.7}
             className="min-h-[40px] px-3 rounded-2xl flex flex-row justify-center items-center bg-[#fff]"
           >
